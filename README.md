@@ -1,5 +1,5 @@
-# Sample Project Title
-Briefly describe your project here.
+# Limelight
+Limelight is a web app that features one user at a time. Being “featured” means the user livestreams him/herself to all other users currently on the website. 
 
 ## Directory Structure
 Explain how the code is organized
