@@ -1,9 +1,8 @@
 package com.limelight.server;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.EnumMap;
 
 @Entity // tells Hibernate to make a table out of this class
 public class User {
@@ -16,7 +15,10 @@ public class User {
 
     private String email;
 
-    private String instagramHandle;
+    // TODO: once frontend sends password via encrypted authorization header, store its hash instead of the password itself
+    private String password;
+
+    EnumMap<SocialMediaHandle, String> socialMediaHandles = new EnumMap<SocialMediaHandle, String>(SocialMediaHandle.class);
 
     public String getUserName() {
         return userName;
@@ -50,11 +52,19 @@ public class User {
         this.email = email;
     }
 
-    public String getInstagramHandle() {
-        return instagramHandle;
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
     }
 
-    public void setInstagramHandle(String instagramHandle) {
-        this.instagramHandle = instagramHandle;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public EnumMap<SocialMediaHandle, String> getSocialMediaHandles() {
+        return socialMediaHandles;
+    }
+
+    public void setSocialMediaHandle(SocialMediaHandle socialMediaHandle, String userName) {
+        socialMediaHandles.put(socialMediaHandle, userName);
     }
 }
