@@ -1,25 +1,47 @@
 package com.limelight.server;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.EnumMap;
 
 @Entity // tells Hibernate to make a table out of this class
 public class User {
     @Id
-    private String name;
+    private String userName;
+
+    private String firstName;
+
+    private String lastName;
 
     private String email;
 
-    private String instagramHandle;
+    // TODO: once frontend sends password via encrypted authorization header, store its hash instead of the password itself
+    private String password;
 
-    public String getName() {
-        return name;
+    EnumMap<SocialMediaHandle, String> socialMediaHandles = new EnumMap<SocialMediaHandle, String>(SocialMediaHandle.class);
+
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String name) {
+        this.userName = name;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -30,11 +52,19 @@ public class User {
         this.email = email;
     }
 
-    public String getInstagramHandle() {
-        return instagramHandle;
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
     }
 
-    public void setInstagramHandle(String instagramHandle) {
-        this.instagramHandle = instagramHandle;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public EnumMap<SocialMediaHandle, String> getSocialMediaHandles() {
+        return socialMediaHandles;
+    }
+
+    public void setSocialMediaHandle(SocialMediaHandle socialMediaHandle, String userName) {
+        socialMediaHandles.put(socialMediaHandle, userName);
     }
 }
