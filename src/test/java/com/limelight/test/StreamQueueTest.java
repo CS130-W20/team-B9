@@ -14,6 +14,7 @@ public class StreamQueueTest {
     @Before
     public void setup() {
         user1 = new User();
+        user1.setUserName("user1");
         user2 = new User();
         user3 = new User();
         user4 = new User();
@@ -44,8 +45,7 @@ public class StreamQueueTest {
 
     @Test
     public void testSelect() {
-        User u1 = queue.nextStreamer();
-        assertEquals(u1, user1);
+        assertEquals(queue.nextStreamer().getUserName(), "user1");
     }
 
 }
