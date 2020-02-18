@@ -8,21 +8,20 @@ public class StreamQueue {
 
     //usage: queue.getStreamers();
     private ConcurrentLinkedQueue<User> streamers;
-    public ConcurrentLinkedQueue<User> getStreamers() { return users; }
+    public ConcurrentLinkedQueue<User> getStreamers() { return streamers; }
 
     public boolean addStreamer(User u) {
-        //@TODO: find a lesser expensive way to do this - this won't scale well
-        if (users.contains(u)) return false;
-        users.add(u);
+        //@TODO: find a less expensive way to do this - this won't scale well
+        if (streamers.contains(u)) return false;
+        streamers.add(u);
         return true;
     }
     public boolean removeStreamer(User u) {
-        return users.remove(u);
+        return streamers.remove(u);
     }
 
     public User nextStreamer() {
-        return users.poll();
+        return streamers.poll();
     }
-
 
 }
