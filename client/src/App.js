@@ -1,8 +1,9 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 import LandingPage from './pages/landing';
+import LoginPage from './pages/login';
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={LandingPage} />
-          {/* <Route path="/stream" component={StreamingPage} /> */}
+          <Route path="/login" component={LoginPage} />
         </Switch>
       </BrowserRouter>
     </div>
