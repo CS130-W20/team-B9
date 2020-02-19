@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(path = "/app")
+@RequestMapping(path = "/app", method = RequestMethod.GET)
 public class MainController {
     @Autowired
     private UserRepository userRepository;
+    private StreamQueue queue = StreamQueue.getInstance();
 
     @PostMapping(path = "/signup")
     public @ResponseBody
@@ -92,6 +93,26 @@ public class MainController {
         userRepository.save(user);
 
         return true;
+    }
+
+    @PostMapping(path = "/joinStreamQueue")
+    public @ResponseBody
+    boolean joinStreamQueue(@RequestParam String userName,
+                            @RequestParam Integer key) {
+        Optional<User> userOptional = getUser(userName);
+        if (userName.hashCode() != key || !userOptional.isPresent()) return false;
+        User user = userOptional.get();
+        return queue.addStreamer(user);
+    }
+
+    @PostMapping(path = "/leaveStreamQueue")
+    public @ResponseBody
+    boolean leaveStreamQueue(@RequestParam String userName,
+                            @RequestParam Integer key) {
+        Optional<User> userOptional = getUser(userName);
+        if (userName.hashCode() != key || !userOptional.isPresent()) return false;
+        User user = userOptional.get();
+        return queue.removeStreamer(user);
     }
 
     @GetMapping(path = "/getAllUsers")
