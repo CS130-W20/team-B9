@@ -1,5 +1,6 @@
 package com.limelight.server;
 import java.util.concurrent.*;
+import java.util.*;
 
 public class StreamQueue {
     //usage: StreamQueue queue = StreamQueue.getInstance();
@@ -7,7 +8,7 @@ public class StreamQueue {
     public static StreamQueue getInstance() { return sq; }
 
     //usage: queue.getStreamers();
-    private ConcurrentLinkedQueue<User> streamers;
+    private ConcurrentLinkedQueue<User> streamers = new ConcurrentLinkedQueue<User>();
     public ConcurrentLinkedQueue<User> getStreamers() { return streamers; }
 
     public boolean addStreamer(User u) {
@@ -17,7 +18,17 @@ public class StreamQueue {
         return true;
     }
     public boolean removeStreamer(User u) {
-        return streamers.remove(u);
+        Iterator i = streamers.iterator();
+        String username = "";
+        while(i.hasNext()) {
+            User user = (User) i.next();
+            username = user.getUserName();
+            if (username.equals(u.getUserName())) {
+                i.remove();
+                return true;
+            }
+        }
+        return false;
     }
 
     public User nextStreamer() {

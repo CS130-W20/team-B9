@@ -17,6 +17,7 @@ public class StreamQueueTest {
         user1.setUserName("user1");
         user2 = new User();
         user3 = new User();
+        user3.setUserName("user3");
         user4 = new User();
         queue = StreamQueue.getInstance();
         queue.addStreamer(user1);
@@ -39,13 +40,13 @@ public class StreamQueueTest {
 
     @Test
     public void testLeave() {
-        queue.removeStreamer(user3);
-        assertTrue(queue.addStreamer(user3));
+        queue.removeStreamer(user1);
+        assertTrue(queue.addStreamer(user1));
     }
 
     @Test
     public void testSelect() {
-        assertEquals(queue.nextStreamer().getUserName(), "user1");
+        assertEquals(queue.nextStreamer().getUserName(), "user3");
     }
 
 }
