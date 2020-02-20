@@ -16,7 +16,7 @@ public class StreamTimerTest {
      * Initialize streamTimer object.
      */
     @Before
-    public void setUp() {
+    public void setup() {
         streamTimer = new StreamTimer();
     }
 
