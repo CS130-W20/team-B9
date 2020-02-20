@@ -130,6 +130,12 @@ public class MainController {
         return true;
     }
 
+    /**
+     * add user to stream queue
+     * @param userName userName to add to stream queue
+     * @param key user's key to ensure it is authorized user
+     * @return true if user was added to stream queue, false otherwise
+     */
     @PostMapping(path = "/joinStreamQueue")
     public @ResponseBody
     boolean joinStreamQueue(@RequestParam String userName,
@@ -140,6 +146,12 @@ public class MainController {
         return queue.addStreamer(user);
     }
 
+    /**
+     * remove user from stream queue
+     * @param userName userName to remove from stream queue
+     * @param key user's key to ensure it is authorized user
+     * @return ture if user was removed from stream queue, false otherwise
+     */
     @PostMapping(path = "/leaveStreamQueue")
     public @ResponseBody
     boolean leaveStreamQueue(@RequestParam String userName,
