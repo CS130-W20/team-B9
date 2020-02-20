@@ -6,14 +6,23 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test StreamTimer functionality.
+ */
 public class StreamTimerTest {
     private StreamTimer streamTimer;
 
+    /**
+     * Initialize streamTimer object.
+     */
     @Before
     public void setUp() {
         streamTimer = new StreamTimer();
     }
 
+    /**
+     * Tests that all streamTimer functions work as expected.
+     */
     @Test
     public void testStreamTimer() {
         assert(streamTimer.getSecondsPastDuringLivestream() == 0);
