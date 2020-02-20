@@ -92,6 +92,9 @@ class Stream extends React.Component {
       <div className="stream-page">
         <div className="container">
           <header>header placeholder</header>
+          <div className="profile-button-container">
+            <Link to="/myprofile">My Profile</Link>
+          </div>
           <section className="stream">
             <iframe
               width="100%"
