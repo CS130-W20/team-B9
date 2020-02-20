@@ -9,8 +9,22 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: ''
-    }
+    };
   }
+
+  onUsernameChange = e => {
+    this.setState({ username: e.target.value });
+  };
+
+  onPasswordChange = e => {
+    this.setState({ password: e.target.value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.history.push('/stream');
+  };
+
   render() {
     const { username, password } = this.state;
 
@@ -20,12 +34,31 @@ class Login extends React.Component {
           <p>Log In</p>
         </section>
         <section className="body">
-          <form>
-            <label for="username">Username</label>
-            <input type="text" name="username" value={username} />
-            <label for="password">Password:</label>
-            <input type="password" name="password" value={password} />
+          {/* todo: submit form to correct endpoint */}
+          <form onSubmit={this.handleSubmit} id="form">
+            <div className="form-input">
+              <label htmlFor="username">Username</label>
+              <input
+                autoFocus
+                type="text"
+                name="username"
+                value={username}
+                onChange={this.onUsernameChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={this.onPasswordChange}
+              />
+            </div>
           </form>
+          <button type="submit" form="form">
+            LOG IN
+          </button>
         </section>
       </div>
     );
