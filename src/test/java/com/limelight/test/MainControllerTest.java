@@ -70,4 +70,45 @@ public class MainControllerTest {
                 .andExpect(content().json(EXPECTED_USER_JSON))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void testJoinStreamQueue() throws Exception {
+        mockMvc.perform(get("/app/joinStreamQueue")
+                .param("userName", TEST_USER_NAME)
+                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("true"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/app/joinStreamQueue")
+                .param("userName", TEST_USER_NAME)
+                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("false"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testLeaveStreamQueue() throws Exception {
+        mockMvc.perform(get("/app/joinStreamQueue")
+                .param("userName", TEST_USER_NAME)
+                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+                .accept(MediaType.APPLICATION_JSON))
+                //.andExpect(content().string("true"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/app/leaveStreamQueue")
+                .param("userName", TEST_USER_NAME)
+                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("true"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/app/leaveStreamQueue")
+                .param("userName", TEST_USER_NAME)
+                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("false"))
+                .andExpect(status().isOk());
+    }
 }
