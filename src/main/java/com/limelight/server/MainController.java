@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+/**
+ * The main controller that processes all GET and POST requests pertaining to users and user attributes.
+ */
 @Controller
 @RequestMapping(path = "/app", method = RequestMethod.GET)
 public class MainController {
@@ -13,6 +16,17 @@ public class MainController {
     private UserRepository userRepository;
     private StreamQueue queue = StreamQueue.getInstance();
 
+    /**
+     * POST request that creates a user account and persists it to the database if the username is not already taken,
+     * then return a user session key. Otherwise, do nothing and return null.
+     *
+     * @param userName  user's username
+     * @param firstName user's first name
+     * @param lastName  user's last name
+     * @param email     user's email address
+     * @param password  user's password
+     * @return null if the username is already taken, or a user session key otherwise
+     */
     @PostMapping(path = "/signup")
     public @ResponseBody
     Integer signUp(@RequestParam String userName,
@@ -37,6 +51,14 @@ public class MainController {
         return userName.hashCode();
     }
 
+    /**
+     * POST request that verifies the user's login credentials. If they are valid, a user session key is returned.
+     * Otherwise, null is returned.
+     *
+     * @param userName user's username
+     * @param password user's password
+     * @return null if the credentials are invalid, or a user session key otherwise
+     */
     @PostMapping(path = "/login")
     public @ResponseBody
     Integer logIn(@RequestParam String userName,
@@ -54,6 +76,19 @@ public class MainController {
         return null;
     }
 
+    /**
+     * POST request that edits an attribute of the user profile. If the user's session key is invalid, does nothing
+     * and returns false. Otherwise, the user's selected attribute is modified and persisted to the database, then
+     * true is returned.
+     *
+     * @param userName  user's username
+     * @param key       user's session key
+     * @param attribute attribute user would like to edit (e.g. EMAIL)
+     * @param platform  optional param specifying the social media platform to be modified; only relevant if
+     *                  <code>attribute</code> is SOCIAL_MEDIA_HANDLE
+     * @param value     updated value for the selected <code>attribute</code>
+     * @return true if the user's session key and edit request are valid, false otherwise
+     */
     @PostMapping(path = "/edit")
     public @ResponseBody
     boolean editProfile(@RequestParam String userName,
@@ -108,13 +143,18 @@ public class MainController {
     @PostMapping(path = "/leaveStreamQueue")
     public @ResponseBody
     boolean leaveStreamQueue(@RequestParam String userName,
-                            @RequestParam Integer key) {
+                             @RequestParam Integer key) {
         Optional<User> userOptional = getUser(userName);
         if (userName.hashCode() != key || !userOptional.isPresent()) return false;
         User user = userOptional.get();
         return queue.removeStreamer(user);
     }
 
+    /**
+     * GET request that returns a JSON list of all users in the database.
+     *
+     * @return a JSON list of all users in the database.
+     */
     @GetMapping(path = "/getAllUsers")
     public @ResponseBody
     Iterable<User> getAllUsers() {
@@ -122,6 +162,12 @@ public class MainController {
         return userRepository.findAll();
     }
 
+    /**
+     * GET request that returns a JSON representation of a selected user.
+     *
+     * @param userName username of selected username
+     * @return JSON representation of the user with specified username
+     */
     @GetMapping(path = "/getUser")
     public @ResponseBody
     Optional<User> getUser(@RequestParam String userName) {
