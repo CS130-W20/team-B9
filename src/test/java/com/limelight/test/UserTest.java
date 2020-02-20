@@ -7,17 +7,11 @@ import org.junit.Test;
 
 import java.util.EnumMap;
 
+import static com.limelight.test.TestConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class UserTest {
-
-    private static String TEST_USER_NAME = "user_name";
-    private static String TEST_FIRST_NAME = "first";
-    private static String TEST_LAST_NAME = "last";
-    private static String TEST_EMAIL = "test_email@ucla.edu";
-    private static String TEST_PASSWORD = "password";
-    private static String TEST_SOCIAL_MEDIA_HANDLE = "test";
 
     private User user;
 
