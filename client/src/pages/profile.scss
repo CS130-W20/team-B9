@@ -32,8 +32,9 @@
             display: inline-block;
             cursor:pointer;
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 10px;
+            width: 150px;
           }
         
         a:hover, a:active {
@@ -55,10 +56,10 @@
             height: 35px;
         }
         .return-button-container {
-            position: relative;
-            overflow: hidden;
+            position: absolute;
+            right: 10px;
+            top: 10px;
             display: inline-block;
-            
         }
         
         form {
