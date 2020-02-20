@@ -7,10 +7,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Class of tests that tests StreamQueue functionality.
+ */
 public class StreamQueueTest {
     private User user1, user2, user3, user4, user5;
     private StreamQueue queue;
 
+    /**
+     * sets up test users and adds them to queue
+     */
     @Before
     public void setup() {
         user1 = new User();
@@ -26,11 +32,17 @@ public class StreamQueueTest {
         queue.addStreamer(user2);
     }
 
+    /**
+     * creates Queue()
+     */
     @Test
     public void createQueue() {
         assertNotNull(queue.getStreamers());
     }
 
+    /**
+     * tests StreamQueue.addStreamer(User u)
+     */
     @Test
     public void testJoin() {
         user5 = new User();
@@ -38,12 +50,18 @@ public class StreamQueueTest {
         assertFalse(queue.addStreamer(user2));
     }
 
+    /**
+     * tests StreamQueue.removeStreamer(User u)
+     */
     @Test
     public void testLeave() {
         queue.removeStreamer(user1);
         assertTrue(queue.addStreamer(user1));
     }
 
+    /**
+     * tests StreamQueue.nextStreamer()
+     */
     @Test
     public void testSelect() {
         assertEquals(queue.nextStreamer().getUserName(), "user3");

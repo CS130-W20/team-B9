@@ -18,6 +18,33 @@ class Stream extends React.Component {
         }
       ]
     };
+
+    this.demoMsgs = [
+      'haha',
+      'lol',
+      'rofl',
+      'The North sux',
+      'White walkers are fake news.',
+      'I AM THE KING. RESPECT ME.',
+      'Our CS130 TA is the best',
+      'Lannister4Life'
+    ];
+
+    //todo: Remove. For demo only.
+    setInterval(() => {
+      this.setState(prevState => ({
+        messages: [
+          ...prevState.messages,
+          {
+            username: 'KingJ0ffrey',
+            message: this.demoMsgs[
+              Math.floor(Math.random() * this.demoMsgs.length)
+            ],
+            key: Date.now()
+          }
+        ]
+      }));
+    }, 3000);
   }
 
   onChatMessageChange = e => {
@@ -49,10 +76,10 @@ class Stream extends React.Component {
   componentDidUpdate() {
     let container = this.messagesRef.current;
 
-    // padding top + bottom  + 2px tolerance = 18 (magic number)
+    // padding top + bottom  + 4px tolerance = 20 (magic number)
     let isScrolledToBottom =
       container.scrollHeight - container.clientHeight <=
-      container.scrollTop + 18;
+      container.scrollTop + 20;
 
     // scroll to bottom if isScrolledToBottom
     if (isScrolledToBottom) container.scrollTop = container.scrollHeight;
@@ -65,7 +92,19 @@ class Stream extends React.Component {
       <div className="stream-page">
         <div className="container">
           <header>header placeholder</header>
-          <section className="stream">stream placeholder</section>
+          <div className="profile-button-container">
+            <Link to="/myprofile">My Profile</Link>
+          </div>
+          <section className="stream">
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/nEhOEfSb5zg?start=57&controls=0"
+              frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </section>
           <section className="stream-info">stream info placeholder</section>
           <section className="chat">
             <div ref={this.messagesRef} className="messages">
