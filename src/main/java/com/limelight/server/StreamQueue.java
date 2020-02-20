@@ -2,6 +2,10 @@ package com.limelight.server;
 import java.util.concurrent.*;
 import java.util.*;
 
+/**
+ * StreamQueue is a singleton that manages the lineup of streamers for the application
+ * It manages creating, joining, and leaving the queue 
+ */
 public class StreamQueue {
     //usage: StreamQueue queue = StreamQueue.getInstance();
     private static StreamQueue sq = new StreamQueue();
@@ -14,6 +18,11 @@ public class StreamQueue {
     //TODO: override equals() and hashCode() in User.java to be able to user
     //      contains method
     //TODO: find less expensive way to do this - this won't scale well!
+    /**
+     * add streamer to queue
+     * @param u user being added to the stream
+     * @return true if streamer was successfully added, false if already in queue
+     */
     public boolean addStreamer(User u) {
         Iterator i = streamers.iterator();
         String username = "";
@@ -26,6 +35,12 @@ public class StreamQueue {
         return true;
     }
 
+    /**
+     * remove streamer from queue
+     * @param u user being removed from stream
+     * @return true if streamer was removed, false if streamer was not already in
+     *          queue
+     */
     public boolean removeStreamer(User u) {
         Iterator i = streamers.iterator();
         String username = "";
@@ -40,6 +55,10 @@ public class StreamQueue {
         return false;
     }
 
+    /**
+     * get next streamer
+     * @return return true if there is a next streamer to be picked
+     */
     public User nextStreamer() {
         return streamers.poll();
     }
