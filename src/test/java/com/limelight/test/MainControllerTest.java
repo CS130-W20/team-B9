@@ -17,6 +17,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Class of tests that test MainController functionality.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @AutoConfigureMockMvc
@@ -28,6 +31,10 @@ public class MainControllerTest {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Test to ensure that user sign up flow works as intended and that new user is persisted to database.
+     * @throws Exception if POST request fails
+     */
     @Test
     public void testSignUp() throws Exception {
         mockMvc.perform(post("/app/signup")
@@ -40,6 +47,10 @@ public class MainControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Test to ensure that user login flow works as intended and that valid user key is returned.
+     * @throws Exception if POST request fails
+     */
     @Test
     public void testLogin() throws Exception {
         mockMvc.perform(post("/app/login")
@@ -50,6 +61,11 @@ public class MainControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Test to ensure that user profile edit flow works as intended and that new user attribute is persisted to
+     * database.
+     * @throws Exception if POST request fails
+     */
     @Test
     public void testEditProfile() throws Exception {
         mockMvc.perform(post("/app/edit")
@@ -62,6 +78,10 @@ public class MainControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Test to ensure that correct user is returned when calling the /getUser endpoint.
+     * @throws Exception if GET request fails
+     */
     @Test
     public void testGetUser() throws Exception {
         mockMvc.perform(get("/app/getUser")
