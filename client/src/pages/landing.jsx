@@ -22,18 +22,20 @@ function Landing() {
       </section>
       <section className="body">
         <div className="body-text">
+          <h2>Limelight</h2>
+          <h4>Tired of vying for attention on social media?</h4>
           <h4>
-            Tired of vying for attention on social media but getting nowhere?
-            Limelight gives you the chance to showcase yourself no matter who
-            you are.
+            We give you the stage to showcase yourself no matter who you are.
           </h4>
-          <p>How? It's easy.</p>
+
           <ol>
             <li>Join a line to be in the Limelight</li>
             <li>Watch other people as you wait</li>
             <li>
-              When it's your turn, you have the stage Livestream yourself to
-              millions of viewers and make your mark.
+              When it's your turn, you have the stage <br />
+              <span>
+                Livestream yourself to millions of viewers and make your mark.
+              </span>
             </li>
           </ol>
           <p>
