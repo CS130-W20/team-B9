@@ -2,7 +2,7 @@ package com.limelight.server;
 import java.util.*;
 
 /**
- * Timer for the each livestraam session.
+ * Timer for the each livestream session.
  */
 public class StreamTimer {
     // Maximum amount of time a livestream can last
