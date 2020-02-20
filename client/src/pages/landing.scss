@@ -26,6 +26,7 @@
 
     .title-container {
       display: flex;
+      margin-bottom: 5px;
     }
 
     .buttons-container {
@@ -51,6 +52,10 @@
     flex: 1;
     padding: 40px 30px;
     background-color: #efefef;
+
+    h4 {
+      margin-bottom: 10px;
+    }
   }
 
   img {

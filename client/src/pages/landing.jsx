@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import './landing.scss';
 
 import logo from '../assets/logo.png';
@@ -21,11 +21,11 @@ function Landing() {
         </div>
       </section>
       <section className="body">
-        <p>
+        <h4>
           Tired of vying for attention on social media but getting nowhere?
           Limelight gives you the chance to showcase yourself no matter who you
           are.
-        </p>
+        </h4>
         <p>How? It's easy.</p>
         <ol>
           <li>Join a line to be in the Limelight</li>
