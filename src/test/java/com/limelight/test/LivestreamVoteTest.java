@@ -21,7 +21,7 @@ public class LivestreamVoteTest {
      * Initializes user, livestream, livestreamVote objects.
      */
     @Before
-    public void setUp() {
+    public void setup() {
         user = new User();
         livestream = new Livestream(user);
         livestreamVote = new LivestreamVote(livestream);
