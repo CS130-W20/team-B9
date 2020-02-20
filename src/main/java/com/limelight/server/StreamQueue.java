@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * StreamQueue is a singleton that manages the lineup of streamers for the application
- * It manages creating, joining, and leaving the queue 
+ * It manages creating, joining, and leaving the queue.
  */
 public class StreamQueue {
     //usage: StreamQueue queue = StreamQueue.getInstance();

@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Class of tests that tests StreamQueue functionality.
+ */
 public class StreamQueueTest {
     private User user1, user2, user3, user4, user5;
     private StreamQueue queue;

@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.EnumMap;
 
+/**
+ * Class that contains user attributes.
+ */
 @Entity // tells Hibernate to make a table out of this class
 public class User {
     @Id

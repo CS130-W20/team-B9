@@ -1,5 +1,8 @@
 package com.limelight.test;
 
+/**
+ * Class of static, final values used by many user tests.
+ */
 public class TestConstants {
     static final String TEST_USER_NAME = "user_name";
     static final String TEST_FIRST_NAME = "first";
