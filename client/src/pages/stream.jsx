@@ -96,7 +96,7 @@ class Stream extends React.Component {
             <iframe
               width="100%"
               height="100%"
-              src="https://www.youtube.com/embed/Sdkwu2FvFfI?controls=0"
+              src="https://www.youtube.com/embed/nEhOEfSb5zg?start=57&controls=0"
               frameBorder="0"
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
