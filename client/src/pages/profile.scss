@@ -1,0 +1,126 @@
+.user-profile-page {
+    .hero {
+        background-color: black;
+        background-image: url('../assets/spotlight-effect.png');
+        background-position: 50%;
+        background-size: 500px;
+        background-repeat: no-repeat;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding:130px 0 180px 0;
+        clip-path: polygon(
+            0 0,
+            100% 0,
+            100% 85%,
+            0 100%,
+          );
+        overflow: hidden;
+        
+        a:link, a:visited {
+            background-color:rgba(87, 86, 86, 0.616);
+            transition: all 0.3s ease-out;
+            color: white;
+            border: 0.5px solid white;
+            border-radius: 7px;
+            padding: 10px 10px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            cursor:pointer;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+          }
+        
+        a:hover, a:active {
+            background-color:rgba(255, 255, 255, 0.616);
+          }
+          
+        h1 {
+            position: absolute;
+            font-size: 22px;
+            color: black;
+            font-weight: bolder;
+            top: 20px;
+            left: 50px;
+        }
+        img {
+            position: absolute;
+            top: 15px;
+            left: 10px;
+            height: 35px;
+        }
+        .return-button-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            
+        }
+        
+        form {
+            border: 2px solid gray;
+            color: gray;
+            background-color: white;
+            padding: 8px 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+    }
+
+    .body {
+        align-items: center;
+        margin-left:auto;
+        margin-right:auto;
+        width:370px;
+
+        label{
+            display: inline-block;
+            width: 120px;
+            height: 30px;
+            font-size: 22px;
+            font-weight: bolder;
+            text-align: right;
+            margin-top: 10px;
+            text-align: right;
+        }
+        input {
+            display: inline-block;
+            margin-top: 10px;
+            margin-left: 10px;
+            text-align: left;
+            border: 0;
+            outline: 0;
+            font-size: 15px;
+            background: transparent;
+            border-bottom: 1px solid black;
+            width: 200px;
+        }
+        a:link, a:visited {
+            background-color:rgba(119, 106, 106, 0.767);
+            transition: all 0.3s ease-out;
+            color: white;
+            border: 0.5px solid white;
+            border-radius: 7px;
+            padding: 10px 10px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            cursor:pointer;
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+          }
+        a:hover, a:active {
+        background-color:rgba(255, 255, 255, 0.616);
+      }
+    }
+
+
+  }
+  
