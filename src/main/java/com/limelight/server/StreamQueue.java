@@ -17,11 +17,14 @@ public class StreamQueue {
     public boolean addStreamer(User u) {
         Iterator i = streamers.iterator();
         String username = "";
-        while(i.hasNext()) {
-            User user = (User)i.next();
+        while (i.hasNext()) {
+            User user = (User) i.next();
             username = user.getUserName();
             if (username.equals(u.getUserName())) return false;
         }
+        streamers.add(u);
+        return true;
+    }
 
     public boolean removeStreamer(User u) {
         Iterator i = streamers.iterator();
