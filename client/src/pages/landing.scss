@@ -53,6 +53,12 @@
     padding: 40px 30px;
     background-color: #efefef;
 
+    .body-text {
+      // width: 300px;
+      max-width: 500px;
+      margin: auto;
+    }
+
     h4 {
       margin-bottom: 10px;
     }

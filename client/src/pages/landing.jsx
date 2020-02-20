@@ -21,24 +21,26 @@ function Landing() {
         </div>
       </section>
       <section className="body">
-        <h4>
-          Tired of vying for attention on social media but getting nowhere?
-          Limelight gives you the chance to showcase yourself no matter who you
-          are.
-        </h4>
-        <p>How? It's easy.</p>
-        <ol>
-          <li>Join a line to be in the Limelight</li>
-          <li>Watch other people as you wait</li>
-          <li>
-            When it's your turn, you have the stage Livestream yourself to
-            millions of viewers and make your mark.
-          </li>
-        </ol>
-        <p>
-          Not interested in showcasing yourself? No problem! Just sit back,
-          relax, and enjoy the show.
-        </p>
+        <div className="body-text">
+          <h4>
+            Tired of vying for attention on social media but getting nowhere?
+            Limelight gives you the chance to showcase yourself no matter who
+            you are.
+          </h4>
+          <p>How? It's easy.</p>
+          <ol>
+            <li>Join a line to be in the Limelight</li>
+            <li>Watch other people as you wait</li>
+            <li>
+              When it's your turn, you have the stage Livestream yourself to
+              millions of viewers and make your mark.
+            </li>
+          </ol>
+          <p>
+            Not interested in showcasing yourself? No problem! Just sit back,
+            relax, and enjoy the show.
+          </p>
+        </div>
       </section>
     </div>
   );
