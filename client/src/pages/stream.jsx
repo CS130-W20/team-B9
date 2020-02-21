@@ -1,6 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './stream.scss';
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuLink,
+} from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
+
 
 class Stream extends React.Component {
   constructor(props) {
@@ -93,7 +101,13 @@ class Stream extends React.Component {
         <div className="container">
           <header>header placeholder</header>
           <div className="profile-button-container">
-            <Link to="/myprofile">My Profile</Link>
+            <Menu>
+              <MenuButton>Option</MenuButton>
+              <MenuList>
+                <MenuLink as={Link} to="/myprofile">My Profile</MenuLink>
+                <MenuLink as={Link} to="/">Sign Out</MenuLink>
+              </MenuList>
+            </Menu>
           </div>
           <section className="stream">
             <iframe
