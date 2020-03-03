@@ -18,8 +18,12 @@ public class StreamController {
     private StreamQueue queue;
 
     public StreamController() {
-        StreamQueue queue = StreamQueue.getInstance();
+        queue = StreamQueue.getInstance();
     }
+
+    private User currentStreamer;
+
+    private Livestream currentStream;
 
     /**
      * Serves part of the stream currently at the front of the {@link StreamQueue} contained in the header.
@@ -30,7 +34,14 @@ public class StreamController {
      */
     @GetMapping("/stream/get")
     public ResponseEntity<ResourceRegion> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
-        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(queue.nextStreamer()));
+        User queueStreamer = queue.getCurrentStreamer();
+
+        if (queueStreamer != currentStreamer) {
+            currentStreamer = queueStreamer;
+            currentStream = new Livestream(currentStreamer);
+        }
+
+        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(queue.getCurrentStreamer()));
         ResourceRegion region = resourceRegion(stream, headers);
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)    // return HTTP code 206 to indicate partial video
                 .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
@@ -42,8 +53,29 @@ public class StreamController {
         // begin uploading user's video stream file
         amazonS3ClientService.uploadFileToS3Bucket(file, true);
 
-        // TODO: add user to queue
+        // TODO
+        queue.addStreamer();
         return new RedirectView("/");
+    }
+
+    @PostMapping("/stream/upvote")
+    public void upvoteStream() {
+        currentStream.upvote();
+    }
+
+    @PostMapping("/stream/downvote")
+    public void downvoteStream() {
+        currentStream.downvote();
+    }
+
+    @GetMapping("/stream/getVoteCount")
+    public int getVoteCount() {
+        return currentStream.getVoteCount();
+    }
+
+    @GetMapping("/stream/getRemainingTime")
+    public long getRemainingTime() {
+        return currentStream.getTimer().getSecondsLeftOfLivestream();
     }
 
     /**

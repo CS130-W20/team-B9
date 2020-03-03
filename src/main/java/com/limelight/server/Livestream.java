@@ -11,12 +11,15 @@ public class Livestream {
     // Timer for the livestream
     private StreamTimer streamTimer;
 
+    private int voteCount;
+
     /**
      * Creates a new livestream associated with the user streaming and a new StreamTimer.
      * @param user the user who is livestreaming content.
      */
     public Livestream(User user) {
         this.user = user;
+        voteCount = 0;
         streamTimer = new StreamTimer();
     }
 
@@ -34,6 +37,18 @@ public class Livestream {
      */
     public User getUser() {
     	return user;
+    }
+
+    public void upvote() {
+        voteCount++;
+    }
+
+    public void downvote() {
+        voteCount--;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
     }
     
     // TODO: Add functionality that livestream stops when streamTimer.secondHasPassed() returns false
