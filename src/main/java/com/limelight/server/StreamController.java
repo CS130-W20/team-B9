@@ -25,6 +25,8 @@ public class StreamController {
 
     private Livestream currentStream;
 
+    private MainController mc;
+
     /**
      * Serves part of the stream currently at the front of the {@link StreamQueue} contained in the header.
      *
@@ -50,12 +52,12 @@ public class StreamController {
     }
 
     @PostMapping("/stream/upload")
-    public RedirectView uploadStream(@RequestPart(value = "file") MultipartFile file, @RequestParam String key) {
+    public RedirectView uploadStream(@RequestPart(value = "file") MultipartFile file,
+                                     @RequestParam String userName,
+                                     @RequestParam Integer key) {
         // begin uploading user's video stream file
         amazonS3ClientService.uploadFileToS3Bucket(file, true);
-
-        // TODO
-//        queue.addStreamer();
+        mc.joinStreamQueue(userName, key);
         return new RedirectView("/");
     }
 
