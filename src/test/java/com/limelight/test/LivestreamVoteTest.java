@@ -23,7 +23,8 @@ public class LivestreamVoteTest {
     @Before
     public void setup() {
         user = new User();
-        livestream = new Livestream(user);
+        user.setUserName("user");
+        livestream = new Livestream(user.getUserName());
         livestreamVote = new LivestreamVote(livestream);
     }
 

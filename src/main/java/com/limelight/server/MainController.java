@@ -142,8 +142,7 @@ public class MainController {
                             @RequestParam Integer key) {
         Optional<User> userOptional = getUser(userName);
         if (userName.hashCode() != key || !userOptional.isPresent()) return false;
-        User user = userOptional.get();
-        return queue.addStreamer(user);
+        return queue.addStreamer(userName);
     }
 
     /**
@@ -158,8 +157,7 @@ public class MainController {
                              @RequestParam Integer key) {
         Optional<User> userOptional = getUser(userName);
         if (userName.hashCode() != key || !userOptional.isPresent()) return false;
-        User user = userOptional.get();
-        return queue.removeStreamer(user);
+        return queue.removeStreamer(userName);
     }
 
     /**

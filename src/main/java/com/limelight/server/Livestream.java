@@ -6,7 +6,7 @@ import java.util.*;
  */
 public class Livestream {
     // The User who is livestreaming
-    private User user;
+    private String user;
 
     // Timer for the livestream
     private StreamTimer streamTimer;
@@ -17,7 +17,7 @@ public class Livestream {
      * Creates a new livestream associated with the user streaming and a new StreamTimer.
      * @param user the user who is livestreaming content.
      */
-    public Livestream(User user) {
+    public Livestream(String user) {
         this.user = user;
         voteCount = 0;
         streamTimer = new StreamTimer();
@@ -35,7 +35,7 @@ public class Livestream {
      * Returns the user who is livestreaming.
      * @return user
      */
-    public User getUser() {
+    public String getUser() {
     	return user;
     }
 
