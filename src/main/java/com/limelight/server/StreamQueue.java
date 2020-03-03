@@ -70,7 +70,7 @@ public class StreamQueue {
      * @return user that is currently livestreaming
      */
     public User getCurrentStreamer() {
-        return streamers.peak();
+        return streamers.peek();
     }
 
     /**
