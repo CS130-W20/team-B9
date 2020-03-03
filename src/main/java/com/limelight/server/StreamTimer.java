@@ -5,6 +5,8 @@ import java.util.*;
  * Timer for the each livestream session.
  */
 public class StreamTimer {
+    StreamQueue queue = StreamQueue.getInstance();
+
     // Maximum amount of time a livestream can last
     private static long maximumLivestreamSeconds = 180; 
 
@@ -36,6 +38,7 @@ public class StreamTimer {
     		secondsLeftOfLivestream = minimumLivestreamSeconds - secondsPastDuringLivestream;
     	}
     	else if(secondsLeftOfLivestream <= 0 || secondsPastDuringLivestream >= maximumLivestreamSeconds) {
+    	    queue.pollStreamer();
     		return false;
     	}
     	return true;

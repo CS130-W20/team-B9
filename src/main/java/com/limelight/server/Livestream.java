@@ -52,4 +52,5 @@ public class Livestream {
     }
     
     // TODO: Add functionality that livestream stops when streamTimer.secondHasPassed() returns false
+
 }
