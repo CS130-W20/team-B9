@@ -34,7 +34,7 @@ public class StreamController {
      */
     @GetMapping("/stream/get")
     public ResponseEntity<ResourceRegion> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
-        User queueStreamer = new User(); // TODO: = queue.getCurrentStreamer();
+        User queueStreamer = queue.getCurrentStreamer();
 
         if (queueStreamer != currentStreamer) {
             currentStreamer = queueStreamer;
