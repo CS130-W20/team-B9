@@ -39,14 +39,28 @@ public class Livestream {
     	return user;
     }
 
+    /**
+     * Process the upvote for the livestream.
+     * Voting buttons should be disabled after a vote occurs.
+     */
     public void upvote() {
         voteCount++;
+        streamTimer.addSecondsToLivestream(5);
     }
 
+    /**
+     * Process the downvote for the livestream.
+     * Voting buttons should be disabled after a vote occurs.
+     */
     public void downvote() {
         voteCount--;
+        streamTimer.decreaseSecondsFromLivestream(2);
     }
 
+    /**
+     * Returned the net votes for the livestream.
+     * @return voteCount
+     */
     public int getVoteCount() {
         return voteCount;
     }
