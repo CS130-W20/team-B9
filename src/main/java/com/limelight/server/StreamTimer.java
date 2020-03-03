@@ -5,6 +5,9 @@ import java.util.*;
  * Timer for the each livestream session.
  */
 public class StreamTimer {
+    // Timer to maintain seconds passed during livestream.
+    Timer timer = new Timer();
+
     // Maximum amount of time a livestream can last
     private static long maximumLivestreamSeconds = 180; 
 
@@ -17,28 +20,40 @@ public class StreamTimer {
     // The number of seconds left that the livestream will last
     private long secondsLeftOfLivestream;
 
+    // False if timer has expired.
+    private boolean hasTimeLeft;
+
     /**
      * Constructor initializes new timer.
+     * secondHasPassed should be called every second
      */
     public StreamTimer() {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                secondHasPassed();
+            }
+        }, 0, 1000);
     	secondsPastDuringLivestream = 0;
     	secondsLeftOfLivestream = 60;
+    	hasTimeLeft = true;
     }
 
     /**
      * This function is called every second. Simulates one second passing for a livestream.
-     * @return boolean wheter the livestream still has time left to run
      */
-    public boolean secondHasPassed() {
+    public void secondHasPassed() {
     	secondsPastDuringLivestream++;
     	secondsLeftOfLivestream--;
     	if(secondsLeftOfLivestream <= 0 && secondsPastDuringLivestream < minimumLivestreamSeconds) {
     		secondsLeftOfLivestream = minimumLivestreamSeconds - secondsPastDuringLivestream;
     	}
     	else if(secondsLeftOfLivestream <= 0 || secondsPastDuringLivestream >= maximumLivestreamSeconds) {
-    		return false;
+    		hasTimeLeft = false;
     	}
-    	return true;
+    	else {
+    	    // Do nothing
+        }
     }
 
     /**
@@ -46,7 +61,7 @@ public class StreamTimer {
      * @return seconds
      */
     public long getSecondsPastDuringLivestream() {
-    	return secondsPastDuringLivestream;
+            return secondsPastDuringLivestream;
     }
 
     /**
@@ -73,6 +88,13 @@ public class StreamTimer {
      */
     public void decreaseSecondsFromLivestream(long seconds) {
     	secondsLeftOfLivestream -= seconds;
-    }  
+    }
 
+    /**
+     * Returns true if the timer has time left to run or false if the timer has expired.
+     * @return hasTimeLeft
+     */
+    public boolean getHasTimeLeft() {
+        return hasTimeLeft;
+    }
 }
