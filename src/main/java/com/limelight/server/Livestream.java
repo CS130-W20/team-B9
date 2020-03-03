@@ -13,6 +13,8 @@ public class Livestream {
 
     private int voteCount;
 
+    private List<LivestreamComment> comments;
+
     /**
      * Creates a new livestream associated with the user streaming and a new StreamTimer.
      * @param user the user who is livestreaming content.
@@ -21,6 +23,7 @@ public class Livestream {
         this.user = user;
         voteCount = 0;
         streamTimer = new StreamTimer();
+        comments = new ArrayList<>();
     }
 
     /**
@@ -63,6 +66,23 @@ public class Livestream {
      */
     public int getVoteCount() {
         return voteCount;
+    }
+
+    /**
+     * Add a comment to the list of comments on the current stream.
+     * @param username of commenter
+     * @param comment content
+     */
+    public void addComment(String username, String comment) {
+        comments.add(new LivestreamComment(username, comment));
+    }
+
+    /**
+     * Get a list of comments on the current stream.
+     * @return list of comments on the current stream
+     */
+    public List<LivestreamComment> getComments() {
+        return comments;
     }
     
     // TODO: Add functionality that livestream stops when streamTimer.secondHasPassed() returns false

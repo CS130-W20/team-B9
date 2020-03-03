@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
+
 @RestController
 public class StreamController {
     private static final long CHUNK_SIZE = 1000000L;
@@ -77,6 +79,16 @@ public class StreamController {
     @GetMapping("/stream/getRemainingTime")
     public long getRemainingTime() {
         return currentStream.getTimer().getSecondsLeftOfLivestream();
+    }
+
+    @PostMapping("/stream/addComment")
+    public void addComment(@RequestParam String userName, @RequestParam String comment) {
+        currentStream.addComment(userName, comment);
+    }
+
+    @GetMapping("/stream/getComments")
+    public List<LivestreamComment> getComments() {
+        return currentStream.getComments();
     }
 
     /**
