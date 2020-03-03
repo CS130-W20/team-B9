@@ -46,7 +46,7 @@ public class StreamController {
         }
 
         // TODO: UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(queue.getCurrentStreamer()));
-        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket("placeholder");
+        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket("SampleVideo_720x480_30mb.mp4");
         ResourceRegion region = resourceRegion(stream, headers);
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)    // return HTTP code 206 to indicate partial video
                 .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
