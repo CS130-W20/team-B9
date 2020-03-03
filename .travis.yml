@@ -1,4 +1,4 @@
 language: java
 
 install:
-  - ./gradlew clean build
+  - chmod +x ./gradlew clean build
