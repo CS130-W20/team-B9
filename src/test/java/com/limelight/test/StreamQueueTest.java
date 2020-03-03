@@ -70,11 +70,18 @@ public class StreamQueueTest {
         assertEquals(queue.nextStreamer().getUserName(), "user3");
     }*/
 
+    /**
+     * tests StreamQueue.getGetCurrentStreamer() and makes sure that current
+     * streamer is the same
+     */
     @Test
     public void testGetCurrentStreamer() {
         assertEquals(queue.getCurrentStreamer(), queue.getCurrentStreamer());
     }
 
+    /**
+     * tests that the queue will remove the current user
+     */
     @Test
     public void testPollStreamer() {
         queue.pollStreamer();
