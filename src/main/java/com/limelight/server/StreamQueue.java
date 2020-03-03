@@ -59,8 +59,26 @@ public class StreamQueue {
      * get next streamer
      * @return return true if there is a next streamer to be picked
      */
-    public User nextStreamer() {
+    /*public User nextStreamer() {
         return streamers.poll();
+    }*/
+
+    /**
+     * get the streamer that is currently livestreaming
+     * @return user that is currently livestreaming
+     */
+    public User getCurrentStreamer() {
+        return streamers.peak();
     }
+
+    /**
+     * removes current streamer from queue after their time is up
+     * called from livestream
+     */
+    public void pollStreamer() {
+        streamers.poll();
+    }
+
+
 
 }
