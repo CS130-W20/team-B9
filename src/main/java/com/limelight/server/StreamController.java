@@ -34,14 +34,15 @@ public class StreamController {
      */
     @GetMapping("/stream/get")
     public ResponseEntity<ResourceRegion> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
-        User queueStreamer = queue.getCurrentStreamer();
+        User queueStreamer = new User(); // TODO: = queue.getCurrentStreamer();
 
         if (queueStreamer != currentStreamer) {
             currentStreamer = queueStreamer;
             currentStream = new Livestream(currentStreamer);
         }
 
-        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(queue.getCurrentStreamer()));
+        // TODO: UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(queue.getCurrentStreamer()));
+        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket("placeholder");
         ResourceRegion region = resourceRegion(stream, headers);
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)    // return HTTP code 206 to indicate partial video
                 .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
@@ -54,7 +55,7 @@ public class StreamController {
         amazonS3ClientService.uploadFileToS3Bucket(file, true);
 
         // TODO
-        queue.addStreamer();
+//        queue.addStreamer();
         return new RedirectView("/");
     }
 
