@@ -22,7 +22,7 @@ public class LivestreamTest {
     @Before
     public void setup() {
         user = new User();
-        livestream = new Livestream(user);
+        livestream = new Livestream(user.getUserName());
     }
 
     /**
