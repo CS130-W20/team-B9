@@ -23,11 +23,9 @@ public class StreamController {
         queue = StreamQueue.getInstance();
     }
 
-    private User currentStreamer;
+    private String currentStreamer;
 
     private Livestream currentStream;
-
-    private MainController mc;
 
     /**
      * Serves part of the stream currently at the front of the {@link StreamQueue} contained in the header.
@@ -38,7 +36,7 @@ public class StreamController {
      */
     @GetMapping("/stream/get")
     public ResponseEntity<ResourceRegion> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
-        User queueStreamer = queue.getCurrentStreamer();
+        String queueStreamer = queue.getCurrentStreamer();
 
         if (queueStreamer != currentStreamer) {
             currentStreamer = queueStreamer;
@@ -59,7 +57,7 @@ public class StreamController {
                                      @RequestParam Integer key) {
         // begin uploading user's video stream file
         amazonS3ClientService.uploadFileToS3Bucket(file, true);
-        mc.joinStreamQueue(userName, key);
+        //TODO: add user to queue
         return new RedirectView("/");
     }
 

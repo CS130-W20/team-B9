@@ -28,10 +28,10 @@ public class StreamQueueTest {
         user4 = new User();
         user4.setUserName("user4");
         queue = StreamQueue.getInstance();
-        queue.addStreamer(user1);
-        queue.addStreamer(user3);
-        queue.addStreamer(user4);
-        queue.addStreamer(user2);
+        queue.addStreamer(user1.getUserName());
+        queue.addStreamer(user3.getUserName());
+        queue.addStreamer(user4.getUserName());
+        queue.addStreamer(user2.getUserName());
     }
 
     /**
@@ -49,8 +49,8 @@ public class StreamQueueTest {
     public void testJoin() {
         user5 = new User();
         user5.setUserName("user5");
-        assertTrue(queue.addStreamer(user5));
-        assertFalse(queue.addStreamer(user2));
+        assertTrue(queue.addStreamer(user5.getUserName()));
+        assertFalse(queue.addStreamer(user2.getUserName()));
     }
 
     /**
@@ -58,8 +58,8 @@ public class StreamQueueTest {
      */
     @Test
     public void testLeave() {
-        queue.removeStreamer(user1);
-        assertTrue(queue.addStreamer(user1));
+        queue.removeStreamer(user1.getUserName());
+        assertTrue(queue.addStreamer(user1.getUserName()));
     }
 
     /**
@@ -85,7 +85,7 @@ public class StreamQueueTest {
     @Test
     public void testPollStreamer() {
         queue.pollStreamer();
-        assertTrue(queue.addStreamer(user3));
+        assertTrue(queue.addStreamer(user3.getUserName()));
     }
 
 }
