@@ -38,13 +38,12 @@ public class StreamController {
     public ResponseEntity<ResourceRegion> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
         String queueStreamer = queue.getCurrentStreamer();
 
-        if (queueStreamer != currentStreamer) {
+        if (!queueStreamer.equals(currentStreamer)) {
             currentStreamer = queueStreamer;
             currentStream = new Livestream(currentStreamer);
         }
 
-        // TODO: UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(queue.getCurrentStreamer()));
-        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket("placeholder");
+        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
         ResourceRegion region = resourceRegion(stream, headers);
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)    // return HTTP code 206 to indicate partial video
                 .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
@@ -55,10 +54,42 @@ public class StreamController {
     public RedirectView uploadStream(@RequestPart(value = "file") MultipartFile file,
                                      @RequestParam String userName,
                                      @RequestParam Integer key) {
-        // begin uploading user's video stream file
+        // begin uploading user's video stream file and add them to queue
         amazonS3ClientService.uploadFileToS3Bucket(file, true);
-        //TODO: add user to queue
-        return new RedirectView("/");
+        joinStreamQueue(userName, key);
+
+        // TODO: redirect to waiting page
+        return new RedirectView("/stream/get");
+    }
+
+    /**
+     * add user to stream queue
+     *
+     * @param userName userName to add to stream queue
+     * @param key      user's key to ensure it is authorized user
+     * @return true if user was added to stream queue, false otherwise
+     */
+    @PostMapping(path = "/joinStreamQueue")
+    public @ResponseBody
+    boolean joinStreamQueue(@RequestParam String userName,
+                            @RequestParam Integer key) {
+        if (userName.hashCode() != key) return false;
+        return queue.addStreamer(userName);
+    }
+
+    /**
+     * remove user from stream queue
+     *
+     * @param userName userName to remove from stream queue
+     * @param key      user's key to ensure it is authorized user
+     * @return ture if user was removed from stream queue, false otherwise
+     */
+    @PostMapping(path = "/leaveStreamQueue")
+    public @ResponseBody
+    boolean leaveStreamQueue(@RequestParam String userName,
+                             @RequestParam Integer key) {
+        if (userName.hashCode() != key) return false;
+        return queue.removeStreamer(userName);
     }
 
     @PostMapping("/stream/upvote")
@@ -133,10 +164,10 @@ public class StreamController {
     /**
      * Returns a user's given stream name according to internal Limelight stream naming conventions.
      *
-     * @param user owner of stream
+     * @param userName owner of stream
      * @return file name of user's stream
      */
-    private String getStreamFromUser(User user) {
-        return String.format("%d.mp4", user.hashCode());
+    private String getStreamFromUser(String userName) {
+        return String.format("%d.mp4", userName);
     }
 }

@@ -33,6 +33,7 @@ public class MainControllerTest {
 
     /**
      * Test to ensure that user sign up flow works as intended and that new user is persisted to database.
+     *
      * @throws Exception if POST request fails
      */
     @Test
@@ -49,6 +50,7 @@ public class MainControllerTest {
 
     /**
      * Test to ensure that user login flow works as intended and that valid user key is returned.
+     *
      * @throws Exception if POST request fails
      */
     @Test
@@ -64,6 +66,7 @@ public class MainControllerTest {
     /**
      * Test to ensure that user profile edit flow works as intended and that new user attribute is persisted to
      * database.
+     *
      * @throws Exception if POST request fails
      */
     @Test
@@ -80,6 +83,7 @@ public class MainControllerTest {
 
     /**
      * Test to ensure that correct user is returned when calling the /getUser endpoint.
+     *
      * @throws Exception if GET request fails
      */
     @Test
@@ -91,44 +95,45 @@ public class MainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void testJoinStreamQueue() throws Exception {
-        mockMvc.perform(get("/app/joinStreamQueue")
-                .param("userName", TEST_USER_NAME)
-                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().string("true"))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("/app/joinStreamQueue")
-                .param("userName", TEST_USER_NAME)
-                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().string("false"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testLeaveStreamQueue() throws Exception {
-        mockMvc.perform(get("/app/joinStreamQueue")
-                .param("userName", TEST_USER_NAME)
-                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
-                .accept(MediaType.APPLICATION_JSON))
-                //.andExpect(content().string("true"))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("/app/leaveStreamQueue")
-                .param("userName", TEST_USER_NAME)
-                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().string("true"))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("/app/leaveStreamQueue")
-                .param("userName", TEST_USER_NAME)
-                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().string("false"))
-                .andExpect(status().isOk());
-    }
+    // TODO: move these tests to StreamControllerTest when it is created
+//    @Test
+//    public void testJoinStreamQueue() throws Exception {
+//        mockMvc.perform(get("/app/joinStreamQueue")
+//                .param("userName", TEST_USER_NAME)
+//                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(content().string("true"))
+//                .andExpect(status().isOk());
+//
+//        mockMvc.perform(get("/app/joinStreamQueue")
+//                .param("userName", TEST_USER_NAME)
+//                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(content().string("false"))
+//                .andExpect(status().isOk());
+//    }
+//
+//    @Test
+//    public void testLeaveStreamQueue() throws Exception {
+//        mockMvc.perform(get("/app/joinStreamQueue")
+//                .param("userName", TEST_USER_NAME)
+//                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+//                .accept(MediaType.APPLICATION_JSON))
+//                //.andExpect(content().string("true"))
+//                .andExpect(status().isOk());
+//
+//        mockMvc.perform(get("/app/leaveStreamQueue")
+//                .param("userName", TEST_USER_NAME)
+//                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(content().string("true"))
+//                .andExpect(status().isOk());
+//
+//        mockMvc.perform(get("/app/leaveStreamQueue")
+//                .param("userName", TEST_USER_NAME)
+//                .param("key", String.valueOf(TEST_USER_NAME.hashCode()))
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(content().string("false"))
+//                .andExpect(status().isOk());
+//    }
 }
