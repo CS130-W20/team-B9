@@ -24,7 +24,7 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnit()
 }
 
 apply plugin: "io.spring.dependency-management"
