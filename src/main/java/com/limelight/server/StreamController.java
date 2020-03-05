@@ -19,13 +19,15 @@ public class StreamController {
 
     private StreamQueue queue;
 
-    public StreamController() {
-        queue = StreamQueue.getInstance();
-    }
-
     private String currentStreamer;
 
     private Livestream currentStream;
+
+    private UrlResource urlResource;
+
+    public StreamController() {
+        queue = StreamQueue.getInstance();
+    }
 
     /**
      * Serves part of the stream currently at the front of the {@link StreamQueue} contained in the header.
@@ -38,15 +40,20 @@ public class StreamController {
     public ResponseEntity<ResourceRegion> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
         String queueStreamer = queue.getCurrentStreamer();
 
+        // TODO: if streamer is null, then the queue is empty, so redirect user to some other page
+        if (queueStreamer == null) {
+            // redirect
+        }
+
         if (!queueStreamer.equals(currentStreamer)) {
+            urlResource = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
             currentStreamer = queueStreamer;
             currentStream = new Livestream(currentStreamer);
         }
 
-        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
-        ResourceRegion region = resourceRegion(stream, headers);
+        ResourceRegion region = resourceRegion(urlResource, headers);
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)    // return HTTP code 206 to indicate partial video
-                .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
+                .contentType(MediaTypeFactory.getMediaType(urlResource).orElse(MediaType.APPLICATION_OCTET_STREAM))
                 .body(region);
     }
 
@@ -82,7 +89,7 @@ public class StreamController {
      *
      * @param userName userName to remove from stream queue
      * @param key      user's key to ensure it is authorized user
-     * @return ture if user was removed from stream queue, false otherwise
+     * @return true if user was removed from stream queue, false otherwise
      */
     @PostMapping(path = "/leaveStreamQueue")
     public @ResponseBody
@@ -120,21 +127,6 @@ public class StreamController {
     @GetMapping("/stream/getComments")
     public List<LivestreamComment> getComments() {
         return currentStream.getComments();
-    }
-
-    /**
-     * Serves the full stream currently at the front of the {@link StreamQueue}.
-     * Primarily used for debugging purposes.
-     *
-     * @return ResponseEntity<UrlResource> representing the full video stream
-     * @throws Exception if malformed URL is accessed
-     */
-    @GetMapping("/stream/get/full")
-    private ResponseEntity<UrlResource> getFullVideo() throws Exception {
-        UrlResource stream = new UrlResource("file:C:\\Users\\admin\\Desktop\\SampleVideo_720x480_30mb.mp4");
-        return ResponseEntity.status(HttpStatus.OK)     // return HTTP code 200 to indicate full video
-                .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
-                .body(stream);
     }
 
     /**
