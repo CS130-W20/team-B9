@@ -57,6 +57,14 @@ public class StreamController {
                 .body(region);
     }
 
+    /**
+     * Uploads a user's stream video to the S3 database and adds them to the {@link StreamQueue}.
+     *
+     * @param file video stream to be uploaded
+     * @param userName of streamer
+     * @param key session key
+     * @return redirect user to post-upload page
+     */
     @PostMapping("/stream/upload")
     public RedirectView uploadStream(@RequestPart(value = "file") MultipartFile file,
                                      @RequestParam String userName,
@@ -99,31 +107,54 @@ public class StreamController {
         return queue.removeStreamer(userName);
     }
 
+    /**
+     * Upvotes the current stream.
+     */
     @PostMapping("/stream/upvote")
     public void upvoteStream() {
         currentStream.upvote();
     }
 
+    /**
+     * Downvotes the current stream.
+     */
     @PostMapping("/stream/downvote")
     public void downvoteStream() {
         currentStream.downvote();
     }
 
+    /**
+     * Gets the vote count for the current stream.
+     * @return vote count
+     */
     @GetMapping("/stream/getVoteCount")
     public int getVoteCount() {
         return currentStream.getVoteCount();
     }
 
+    /**
+     * Gets the time remaining for the current stream.
+     * @return time remaining
+     */
     @GetMapping("/stream/getRemainingTime")
     public long getRemainingTime() {
         return currentStream.getTimer().getSecondsLeftOfLivestream();
     }
 
+    /**
+     * Adds a comment to the current stream.
+     * @param userName of commenter
+     * @param comment content of comment
+     */
     @PostMapping("/stream/addComment")
     public void addComment(@RequestParam String userName, @RequestParam String comment) {
         currentStream.addComment(userName, comment);
     }
 
+    /**
+     * Gets list of comments on current stream.
+     * @return list of comments
+     */
     @GetMapping("/stream/getComments")
     public List<LivestreamComment> getComments() {
         return currentStream.getComments();
