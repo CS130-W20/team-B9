@@ -46,8 +46,8 @@ public class StreamController {
         }
 
         if (!queueStreamer.equals(currentStreamer)) {
-            urlResource = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
             currentStreamer = queueStreamer;
+            urlResource = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
             currentStream = new Livestream(currentStreamer);
         }
 
@@ -66,7 +66,7 @@ public class StreamController {
         joinStreamQueue(userName, key);
 
         // TODO: redirect to waiting page
-        return new RedirectView("/stream/get");
+        return new RedirectView("/");
     }
 
     /**
@@ -160,6 +160,6 @@ public class StreamController {
      * @return file name of user's stream
      */
     private String getStreamFromUser(String userName) {
-        return String.format("%d.mp4", userName);
+        return String.format("%s.mp4", userName);
     }
 }
