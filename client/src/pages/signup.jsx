@@ -7,13 +7,16 @@ class Signup extends React.Component {
     super(props);
 
     this.state = {
-      username: '',
-      password: ''
+      userName: '',
+      password: '',
+      firstName: 'aaa',
+      lastName:'bbb',
+      email:'placeholder@gmail.com'
     };
   }
 
   onUsernameChange = e => {
-    this.setState({ username: e.target.value });
+    this.setState({ userName: e.target.value });
   };
 
   onPasswordChange = e => {
@@ -22,10 +25,25 @@ class Signup extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-  };
+    const form  = new FormData();
+
+    for(const name in this.state) {
+      form.append(name, this.state[name]);
+    }
+  
+    try {
+    fetch('http://localhost:8080/app/signup', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: form
+    });
+  } catch (e) {
+    alert(e.message);
+  }
+};
 
   render() {
-    const { username, password } = this.state;
+    const { userName, password } = this.state;
 
     return (
       <div className="signup-page">
@@ -36,12 +54,12 @@ class Signup extends React.Component {
           {/* todo: submit form to correct endpoint */}
           <form onSubmit={this.handleSubmit} id="form">
             <div className="form-input">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="userName">Username</label>
               <input
                 autoFocus
                 type="text"
-                name="username"
-                value={username}
+                name="userName"
+                value={userName}
                 onChange={this.onUsernameChange}
               />
             </div>

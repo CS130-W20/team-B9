@@ -47,7 +47,9 @@ public class MainController {
         newUser.setEmail(email);
         newUser.setPassword(password);
         userRepository.save(newUser);
-
+        
+        System.out.println("user created" );
+        System.out.println(userName);
         return userName.hashCode();
     }
 
@@ -72,6 +74,9 @@ public class MainController {
         if (user.get().checkPassword(password)) {
             return userName.hashCode();
         }
+
+        System.out.println("login success" );
+        System.out.println(userName);
 
         return null;
     }
@@ -122,10 +127,15 @@ public class MainController {
                 break;
             case SOCIAL_MEDIA_HANDLE:
                 user.setSocialMediaHandle(SocialMediaHandle.valueOf(platform), value);
+            case OTHER_INFO:
+                user.setOtherInfo(value);
         }
 
         // important: commit changes to database
         userRepository.save(user);
+
+        System.out.println("profile changed" );
+        System.out.println(userName);
 
         return true;
     }
