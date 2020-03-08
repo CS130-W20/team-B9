@@ -8,5 +8,6 @@ public enum EditableUserAttribute {
     LAST_NAME,
     EMAIL,
     PASSWORD,
+    OTHER_INFO,
     SOCIAL_MEDIA_HANDLE
 }

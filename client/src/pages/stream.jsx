@@ -8,6 +8,7 @@ import {
   MenuLink,
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
+import logo from '../assets/logo.png'
 
 
 class Stream extends React.Component {
@@ -17,12 +18,20 @@ class Stream extends React.Component {
     this.messagesRef = React.createRef();
 
     this.state = {
+      currentStream: {
+        streamerName: '',
+        timeRemain:''
+      },
       chatMessage: '',
+      voted: false,
+      inqueue: false,
+      userName: '',
+      key: 0,
       messages: [
         {
           username: 'KingJ0ffrey',
           message: 'BOW TO ME JON SNOW',
-          key: Date.now()
+          key: Date.now(),
         }
       ]
     };
@@ -66,40 +75,90 @@ class Stream extends React.Component {
     }
   };
 
-  //todo: change username to be the person who is logged in
-  onSend = () => {
-    this.setState(prevState => ({
-      messages: [
-        ...prevState.messages,
-        {
-          username: 'Warden0fDaNorth',
-          message: prevState.chatMessage,
-          key: Date.now()
-        }
-      ],
-      chatMessage: ''
-    }));
+  onVoteUp = e => {
+    if (this.state.voted === false) {
+      this.setState({voted: true});
+      fetch('http://localhost:8080/stream/upvote', {
+        method: 'POST',
+        mode: 'no-cors',
+      });
+    }
   };
 
-  componentDidUpdate() {
-    let container = this.messagesRef.current;
+  onVoteDown = e => {
+    if (this.state.voted === false) {
+      this.setState({voted: true});
+      fetch('http://localhost:8080/stream/vote', {
+        method: 'POST',
+        mode: 'no-cors',
+      });
+    }
+  };
 
-    // padding top + bottom  + 4px tolerance = 20 (magic number)
-    let isScrolledToBottom =
-      container.scrollHeight - container.clientHeight <=
-      container.scrollTop + 20;
+ //todo: change username to be the person who is logged in
+ onSend = () => {
+  this.setState(prevState => ({
+    messages: [
+      ...prevState.messages,
+      {
+        username: 'Warden0fDaNorth',
+        message: prevState.chatMessage,
+        key: Date.now()
+      }
+    ],
+    chatMessage: ''
+  }));
+  const form = new FormData();
+  form.append(this.state.userName, this.state.chatMessage);
+  fetch('http://localhost:8080/addComment', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: form
+    });
+};
 
-    // scroll to bottom if isScrolledToBottom
-    if (isScrolledToBottom) container.scrollTop = container.scrollHeight;
+onQueue = e => {
+  if (!this.state.inqueue) {
+    this.setState({inqueue: true});
+    fetch('http://localhost:8080/joinStreamQueue', {
+      method: 'POST',
+      mode: 'no-cors',
+    });
+  } else {
+    this.setState({inqueue: false});
+    fetch('http://localhost:8080/leaveStreamQueue', {
+      method: 'POST',
+      mode: 'no-cors',
+    });
   }
+}
+
+componentDidUpdate() {
+  let container = this.messagesRef.current;
+
+  // padding top + bottom  + 4px tolerance = 20 (magic number)
+  let isScrolledToBottom =
+    container.scrollHeight - container.clientHeight <=
+    container.scrollTop + 20;
+
+  // scroll to bottom if isScrolledToBottom
+  if (isScrolledToBottom) container.scrollTop = container.scrollHeight;
+}
+
 
   render() {
-    const { chatMessage, messages } = this.state;
-
+    const { voted, inqueue, userName, key, chatMessage, messages } = this.state;
+    const joinqueue = (
+        <button>Join Queue</button>
+    )
+    const leavequeue = (
+      <button>Leave Queue</button>
+    )
     return (
       <div className="stream-page">
         <div className="container">
-          <header>header placeholder</header>
+          <img src={logo} alt="logo" />
+          <header>Limelight</header>
           <div className="profile-button-container">
             <Menu>
               <MenuButton>Option</MenuButton>
@@ -108,6 +167,10 @@ class Stream extends React.Component {
                 <MenuLink as={Link} to="/">Sign Out</MenuLink>
               </MenuList>
             </Menu>
+          </div>
+          <div className="queue-button" 
+            onClick={this.onQueue.bind(this)}>
+            {this.state.inqueue ? leavequeue : joinqueue}>
           </div>
           <section className="stream">
             <iframe
@@ -119,7 +182,22 @@ class Stream extends React.Component {
               allowFullScreen
             ></iframe>
           </section>
-          <section className="stream-info">stream info placeholder</section>
+          <section className="stream-info">
+            <div className="streamer-username">
+              <p>Username</p>
+              <p>Time remaining:</p>
+            </div>
+            <div className="voteUpButton">
+              <button
+              disabled={this.state.voted}
+              onClick={this.onVoteUp.bind(this)}>+5 Seconds</button>
+            </div>
+            <div className="voteDownButton">
+              <button 
+              disabled={this.state.voted}
+              onClick={this.onVoteDown.bind(this)}>-2 Seconds</button>
+            </div>
+          </section>
           <section className="chat">
             <div ref={this.messagesRef} className="messages">
               {messages.map(({ username, message, key }) => (

@@ -6,6 +6,7 @@ import LandingPage from './pages/landing';
 import LoginPage from './pages/login';
 import SignupPage from './pages/signup';
 import StreamPage from './pages/stream';
+import MyProfilePage from './pages/profile';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/login" component={LoginPage} />
           <Route path="/signup" component={SignupPage} />
           <Route path="/stream" component={StreamPage} />
+          <Route path="/myprofile" component={MyProfilePage} />
         </Switch>
       </BrowserRouter>
     </div>

@@ -113,6 +113,7 @@ public class StreamController {
     @PostMapping("/stream/upvote")
     public void upvoteStream() {
         currentStream.upvote();
+        //System.out.println("voted up" );
     }
 
     /**
@@ -121,6 +122,7 @@ public class StreamController {
     @PostMapping("/stream/downvote")
     public void downvoteStream() {
         currentStream.downvote();
+        //System.out.println("voted down" );
     }
 
     /**

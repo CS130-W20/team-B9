@@ -7,26 +7,48 @@ class Login extends React.Component {
     super(props);
 
     this.state = {
-      username: '',
+      userName: '',
       password: ''
     };
   }
 
   onUsernameChange = e => {
-    this.setState({ username: e.target.value });
+    this.setState({ userName: e.target.value });
   };
 
   onPasswordChange = e => {
     this.setState({ password: e.target.value });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.history.push('/stream');
+    handleSubmit = e => {
+      e.preventDefault();
+      const form  = new FormData();
+  
+      for(const name in this.state) {
+        form.append(name, this.state[name]);
+      }
+
+      try {
+      fetch('http://localhost:8080/app/login', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: form
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(response) {
+        this.setState({ key: response });
+      });
+      
+      //this.props.history.push('/stream');
+    } catch (e) {
+      alert(e.message);
+    }
   };
 
   render() {
-    const { username, password } = this.state;
+    const { userName, password } = this.state;
 
     return (
       <div className="login-page">
@@ -37,12 +59,12 @@ class Login extends React.Component {
           {/* todo: submit form to correct endpoint */}
           <form onSubmit={this.handleSubmit} id="form">
             <div className="form-input">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="userName">Username</label>
               <input
                 autoFocus
                 type="text"
-                name="username"
-                value={username}
+                name="userName"
+                value={userName}
                 onChange={this.onUsernameChange}
               />
             </div>

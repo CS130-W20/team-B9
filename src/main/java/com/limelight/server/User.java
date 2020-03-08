@@ -21,6 +21,8 @@ public class User {
     // TODO: once frontend sends password via encrypted authorization header, store its hash instead of the password itself
     private String password;
 
+    private String otherInfo;
+
     EnumMap<SocialMediaHandle, String> socialMediaHandles = new EnumMap<SocialMediaHandle, String>(SocialMediaHandle.class);
 
     public String getUserName() {
@@ -51,6 +53,10 @@ public class User {
         return email;
     }
 
+    public String getOtherInfo() {
+        return otherInfo;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -65,6 +71,10 @@ public class User {
 
     public EnumMap<SocialMediaHandle, String> getSocialMediaHandles() {
         return socialMediaHandles;
+    }
+
+    public void setOtherInfo(String otherInfo) {
+        this.otherInfo = otherInfo;
     }
 
     public void setSocialMediaHandle(SocialMediaHandle socialMediaHandle, String userName) {
