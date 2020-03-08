@@ -27,17 +27,18 @@ public class MainController {
      * @param password  user's password
      * @return null if the username is already taken, or a user session key otherwise
      */
+    @CrossOrigin
     @PostMapping(path = "/signup")
     public @ResponseBody
     Integer signUp(@RequestParam String userName,
-                   @RequestParam String firstName,
-                   @RequestParam String lastName,
-                   @RequestParam String email,
+                //    @RequestParam String firstName,
+                //    @RequestParam String lastName,
+                //    @RequestParam String email,
                    @RequestParam String password) {
 
         // username is already taken
         if (getUser(userName).isPresent()) {
-            return null;
+            return 0;
         }
 
         User newUser = new User();
@@ -61,6 +62,7 @@ public class MainController {
      * @param password user's password
      * @return null if the credentials are invalid, or a user session key otherwise
      */
+    @CrossOrigin
     @PostMapping(path = "/login")
     public @ResponseBody
     Integer logIn(@RequestParam String userName,
@@ -96,6 +98,7 @@ public class MainController {
      * @param value     updated value for the selected <code>attribute</code>
      * @return true if the user's session key and edit request are valid, false otherwise
      */
+    @CrossOrigin
     @PostMapping(path = "/edit")
     public @ResponseBody
     boolean editProfile(@RequestParam String userName,

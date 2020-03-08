@@ -7,15 +7,12 @@ class Signup extends React.Component {
     super(props);
 
     this.state = {
-      userName: '',
-      password: '',
-      firstName: 'aaa',
-      lastName:'bbb',
-      email:'placeholder@gmail.com',
-<<<<<<< HEAD
-=======
-      key: ''
->>>>>>> master
+      userName: ' ',
+      password: ' ',
+      errors: '',
+      // firstName: 'aaa',
+      // lastName:'bbb',
+      // email:'placeholder@gmail.com',
     };
   }
 
@@ -37,39 +34,39 @@ class Signup extends React.Component {
       }
     }
   
-    try {
     fetch('http://localhost:8080/app/signup', {
       method: 'POST',
-      mode: 'no-cors',
+      headers: {
+        'Access-Control-Allow-Origin':'*'
+      },
       body: form
     })
-    .then(function(response) {
+    .then((response) => {
       return response.json();
     })
-    .then(function(response) {
-<<<<<<< HEAD
-      localStorage.setItem('userSessionKey', response);
-      console.log(localStorage.getItem('userSessionKey'));
-=======
-      this.setState({ key: response });
->>>>>>> master
+    .then((response) => {
+      if (response == 0) {
+        this.setState({errors: "Username taken."});
+      }
+      else{
+        localStorage.setItem('userSessionKey', response);
+        localStorage.setItem('userName', this.state.userName);
+        this.props.history.push('/stream');
+      }
     });
-  } catch (e) {
-    alert(e.message);
-  }
 };
 
   render() {
-    const { userName, password } = this.state;
-
+    const { userName, password, errors } = this.state;
+    
     return (
       <div className="signup-page">
         <section className="hero">
           <p>Sign Up</p>
         </section>
         <section className="body">
-          {/* todo: submit form to correct endpoint */}
           <form onSubmit={this.handleSubmit} id="form">
+            <p>{errors}</p>
             <div className="form-input">
               <label htmlFor="userName">Username</label>
               <input
