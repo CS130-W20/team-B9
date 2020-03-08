@@ -48,13 +48,8 @@ public class MainController {
         newUser.setPassword(password);
         userRepository.save(newUser);
         
-<<<<<<< HEAD
-        System.out.println("user created" );
-        System.out.println(userName);
-=======
         //System.out.println("user created" );
         //System.out.println(userName);
->>>>>>> master
         return userName.hashCode();
     }
 
