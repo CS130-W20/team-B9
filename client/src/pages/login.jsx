@@ -26,7 +26,9 @@ class Login extends React.Component {
       const form  = new FormData();
   
       for(const name in this.state) {
-        form.append(name, this.state[name]);
+        if (name !== 'errors') {
+          form.append(name, this.state[name]);
+        }
       }
 
       fetch('http://localhost:8080/app/login', {
@@ -40,10 +42,10 @@ class Login extends React.Component {
         return response.json();
       })
       .then((response) => {
-        if (response == 0) {
-          if (this.state.userName == '') {
+        if (response === 0) {
+          if (this.state.userName === '') {
             this.setState({ errors: "Please enter username" });
-          } else if (this.state.password == '') {
+          } else if (this.state.password === '') {
             this.setState({ errors: "Please enter password" });
           } else {
             this.setState({ errors: "Wrong username or password" });

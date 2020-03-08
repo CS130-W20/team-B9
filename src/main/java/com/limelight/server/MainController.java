@@ -46,11 +46,10 @@ public class MainController {
         newUser.setFirstName("");
         newUser.setLastName("");
         newUser.setEmail("");
+        newUser.setOtherInfo("");
         newUser.setPassword(password);
         userRepository.save(newUser);
         
-        //System.out.println("user created" );
-        //System.out.println(userName);
         return userName.hashCode();
     }
 
@@ -78,9 +77,6 @@ public class MainController {
             System.out.println(userName);
             return userName.hashCode();
         }
-
-        //System.out.println("login success" );
-        //System.out.println(userName);
 
         return 0;
     }
@@ -132,15 +128,14 @@ public class MainController {
                 break;
             case SOCIAL_MEDIA_HANDLE:
                 user.setSocialMediaHandle(SocialMediaHandle.valueOf(platform), value);
+                break;
             case OTHER_INFO:
                 user.setOtherInfo(value);
+                break;
         }
 
         // important: commit changes to database
         userRepository.save(user);
-
-        System.out.println("profile changed" );
-        System.out.println(userName);
 
         return true;
     }
@@ -163,6 +158,7 @@ public class MainController {
      * @param userName username of selected username
      * @return JSON representation of the user with specified username
      */
+    @CrossOrigin
     @GetMapping(path = "/getUser")
     public @ResponseBody
     Optional<User> getUser(@RequestParam String userName) {

@@ -25,8 +25,6 @@ class Stream extends React.Component {
       chatMessage: '',
       voted: false,
       inqueue: false,
-      userName: '',
-      key: 0,
       messages: [
         {
           username: 'KingJ0ffrey',

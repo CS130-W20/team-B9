@@ -9,48 +9,65 @@ class UserProfile extends React.Component {
     this.name = props.item;
     this.state = {
         // profilePic: null,
-        userName: '',
+        userName: localStorage.getItem('userName'),
+        key: localStorage.getItem('userSessionKey'),
         firstName: '',
-        lastname: '',
+        firstNameChanged: false,
+        lastName: '',
+        lastNameChanged:  false,
         email: '',
+        emailChanged: false,
         instagram: '',
+        instagramChanged: false,
         youtube: '',
-        twitter: '',
-        snapchat: '',
-        other: ''
+        youtubeChanged: false,
+        facebook: '',
+        facebookChanged: false,
+        // twitter: '',
+        // twitterChanged: false,
+        other: '',
+        otherChanged: false,
     };
 }
 
     handleFirstNameChage = e => {
-        this.setState({firstname: e.target.value});
+        this.setState({firstName: e.target.value});
+        this.setState({firstNameChanged: true});
     };
 
     handleLastNameChage = e => {
-        this.setState({lastname: e.target.value});
+        this.setState({lastName: e.target.value});
+        this.setState({lastNameChanged: true});
     };
 
     handleEmailChange = e => {
         this.setState({email: e.target.value});
+        this.setState({emailChanged: true});
     };
 
     handleInstagramChange = e => {
         this.setState({instagram: e.target.value});
+        this.setState({instagramChanged: true});
     };
 
     handleYoutubeChange = e => {
         this.setState({youtube: e.target.value});
+        this.setState({youtubeChanged: true});
     };
 
-    handleTwitterChange = e => {
-        this.setState({twitter: e.target.value});
+    handleFacebookChange = e => {
+        this.setState({facebook: e.target.value});
+        this.setState({facebookChanged: true});
     };
 
-    handleSnapchatChange = e => {
-        this.setState({snapchat: e.target.value});
-    };
+    // handleTwitterChange = e => {
+    //     this.setState({twitter: e.target.value});
+    //     this.setState({twitterChanged: true});
+    // };
 
     handleOtherChange = e => {
         this.setState({other: e.target.value});
+        this.setState({otherChanged: true});
     };
 
     handleImage = e => {   
@@ -65,27 +82,160 @@ class UserProfile extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-
-        const form  = new FormData();
-
-        for(const name in this.state) {
-          form.append(name, this.state[name]);
+        
+        if (this.state.firstNameChanged) {
+            const form  = new FormData();
+            form.append('userName', this.state.userName);
+            form.append('key', this.state.key);
+            form.append('attribute', 'FIRST_NAME');
+            form.append('value', this.state.firstName);
+        
+            fetch('http://localhost:8080/app/edit', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: form
+            });
         }
-      
-        try {
-        fetch('http://localhost:8080/app/edit', {
-          method: 'POST',
-          mode: 'no-cors',
-          body: form
-        });
-      } catch (e) {
-        alert(e.message);
-      }
+
+        if (this.state.lastNameChanged) {
+            const form  = new FormData();
+            form.append('userName', this.state.userName);
+            form.append('key', this.state.key);
+            form.append('attribute', 'LAST_NAME');
+            form.append('value', this.state.lastName);
+        
+            fetch('http://localhost:8080/app/edit', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: form
+            });
+        }
+
+        if (this.state.emailChanged) {
+            const form  = new FormData();
+            form.append('userName', this.state.userName);
+            form.append('key', this.state.key);
+            form.append('attribute', 'EMAIL');
+            form.append('value', this.state.email);
+        
+            fetch('http://localhost:8080/app/edit', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: form
+            });
+        }
+
+        if (this.state.instagramChanged) {
+            const form  = new FormData();
+            form.append('userName', this.state.userName);
+            form.append('key', this.state.key);
+            form.append('attribute', 'SOCIAL_MEDIA_HANDLE');
+            form.append('platform', 'INSTAGRAM');
+            form.append('value', this.state.instagram);
+        
+            fetch('http://localhost:8080/app/edit', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: form
+            });
+        }
+
+        if (this.state.youtubeChanged) {
+            const form  = new FormData();
+            form.append('userName', this.state.userName);
+            form.append('key', this.state.key);
+            form.append('attribute', 'SOCIAL_MEDIA_HANDLE');
+            form.append('platform', 'YOUTUBE');
+            form.append('value', this.state.youtube);
+        
+            fetch('http://localhost:8080/app/edit', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: form
+            });
+        }
+
+        if (this.state.facebookChanged) {
+            const form  = new FormData();
+            form.append('userName', this.state.userName);
+            form.append('key', this.state.key);
+            form.append('attribute', 'SOCIAL_MEDIA_HANDLE');
+            form.append('platform', 'FACEBOOK');
+            form.append('value', this.state.facebook);
+        
+            fetch('http://localhost:8080/app/edit', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: form
+            });
+        }
+
+        // if (this.state.twitterChanged) {
+        //     const form  = new FormData();
+        //     form.append('userName', this.state.userName);
+        //     form.append('key', this.state.key);
+        //     form.append('attribute', 'SOCIAL_MEDIA_HANDLE');
+        //     form.append('platform', 'SNAPCHAT');
+        //     form.append('value', this.state.twitter);
+        
+        //     fetch('http://localhost:8080/app/edit', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Access-Control-Allow-Origin':'*'
+        //           },
+        //         body: form
+        //     });
+        // }
+
+        if (this.state.otherChanged) {
+            const form  = new FormData();
+            form.append('userName', this.state.userName);
+            form.append('key', this.state.key);
+            form.append('attribute', 'OTHER_INFO');
+            form.append('value', this.state.other);
+        
+            fetch('http://localhost:8080/app/edit', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: form
+            });
+        }
     };
 
-
+componentWillMount(){
+    const userNameQuery = encodeURIComponent(this.state.userName);
+    fetch(`http://localhost:8080/app/getUser?userName=${userNameQuery}`, {
+        method: 'GET',
+        headers: {
+            'Access-Control-Allow-Origin':'*',
+        },
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .then((response) => {
+        this.setState({firstName: response.firstName});
+        this.setState({lastName: response.lastName});
+        this.setState({email: response.email});
+        this.setState({other: response.otherInfo});
+        if (Object.keys(response.socialMediaHandles).length !== 0 ){
+            if (response.socialMediaHandles['INSTAGRAM'] !== null) {
+                this.setState({instagram: response.socialMediaHandles['INSTAGRAM']});
+            }
+            if (response.socialMediaHandles['YOUTUBE'] !== null) {
+                this.setState({youtube: response.socialMediaHandles['YOUTUBE']});
+            }
+            if (response.socialMediaHandles['FACEBOOK'] !== null) {
+                this.setState({facebook: response.socialMediaHandles['FACEBOOK']});
+            }
+            if (response.socialMediaHandles['TWITTER'] !== null) {
+                this.setState({twitter: response.socialMediaHandles['TWITTER']});
+            }
+        }
+    });
+}
   render() {
-      const{ username, firstname, lastname, email, instagram, youtube, twitter, snapchat, other } = this.state;
+      const{ userName, key, firstName, lastName, email, instagram, youtube, facebook, twitter, other } = this.state;
     return (
         <div className="user-profile-page">
             <section className="hero">
@@ -104,92 +254,77 @@ class UserProfile extends React.Component {
                     </form>
                 </div> */}
                 <div className="username">
-                    <p>Username</p>
+                    <p>{userName}</p>
+                    <p>{key}</p>
                 </div>
             </section>
             <section className="body">
                 <form onSubmit={this.handleSubmit} id="form">
                     <div className="form-input">
-                    <tr>
-                        <label for="firstname">First Name</label>
+                        <label htmlFor="firstName">First Name</label>
                         <input 
                         type="text" 
-                        name="firstname" 
-                        value={firstname} 
+                        name="firstName" 
+                        value={firstName} 
                         onChange={this.handleFirstNameChage}/>
-                    </tr>
                     </div>
                     
                     <div className="form-input">
-                    <tr>
-                        <label for="lastname">Last Name</label>
+                        <label htmlFor="lastName">Last Name</label>
                         <input
                         type="text"
-                        name="lastname"
-                        value={lastname} 
+                        name="lastName"
+                        value={lastName} 
                         onChange={this.handleLastNameChage}/>
-                    </tr>
                     </div>
                     
                     <div className="form-input">
-                    <tr>
-                        <label for="mail">E-Mail</label>
+                        <label htmlFor="mail">E-Mail</label>
                         <input
                         type="text"
                         name="email"
                         value={email}
                         onChange={this.handleEmailChange} />
-                    </tr>
                     </div>
 
                     <div className="form-input">
-                    <tr>
-                        <label for="instagram">Instagram</label>
+                        <label htmlFor="instagram">Instagram</label>
                         <input type="text"
                         name="instagram"
-                        value={instagram}
+                        value={instagram || ''}
                         onChange={this.handleInstagramChange} />
-                    </tr>
                     </div>
 
                     <div className="form-input">
-                    <tr>
-                        <label for="youtube">Youtube</label>
+                        <label htmlFor="youtube">Youtube</label>
                         <input type="text"
                         name="youtube"
-                        value={youtube}
+                        value={youtube || ''}
                         onChange={this.handleYoutubeChange} />
-                    </tr>
                     </div>
                     
                     <div className="form-input">
-                    <tr>
-                        <label for="twitter">Twitter</label>
+                        <label htmlFor="facebook">Facebook</label>
+                        <input type="text"
+                        name="facebook"
+                        value={facebook || ''}
+                        onChange={this.handleFacebookChange} />
+                    </div>
+
+                    {/* <div className="form-input">
+                        <label htmlFor="twitter">Twitter</label>
                         <input type="text"
                         name="twitter"
-                        value={twitter}
+                        value={twitter || ''}
                         onChange={this.handleTwitterChange} />
-                    </tr>
-                    </div>
+                    </div> */}
 
                     <div className="form-input">
-                    <tr>
-                        <label for="snapchat">Snapchat</label>
-                        <input type="text"
-                        name="snapchat"
-                        value={snapchat}
-                        onChange={this.handleSnapchatChange} />
-                    </tr>
-                    </div>
-
-                    <div className="form-input">
-                    <tr>
-                        <label for="other">Other</label>
+                        <label htmlFor="other">Other</label>
                         <input type="text"
                         name="other" 
-                        value={other} 
+                        value={other || ''} 
                         onChange={this.handleOtherChange} />
-                    </tr>
                     </div>
 
                 </form>
