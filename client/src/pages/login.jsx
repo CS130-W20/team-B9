@@ -31,7 +31,7 @@ class Login extends React.Component {
         }
       }
 
-      fetch('http://limelight-ucla.herokuapp.com/app/login', {
+      fetch('https://limelight-ucla.herokuapp.com/app/login', {
         method: 'POST',
         headers: {
           'Access-Control-Allow-Origin':'*'
