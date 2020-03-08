@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping(path = "/stream", method = RequestMethod.GET)
@@ -67,19 +68,23 @@ public class StreamController {
     // builder.contentType(MediaTypeFactory.getMediaType(urlResource).orElse(MediaType.APPLICATION_OCTET_STREAM));
 
     String url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/ucla.mp4";
-    
-
 
     if (queueStreamer == null) {
+      System.out.println(1);
       currentStreamer = null;
       if (currentStream != null) {
         currentStream.clearComments();
+        currentStream = null;
       }
     } else if (!queueStreamer.equals(currentStreamer)) {
+      System.out.println(2);
       currentStreamer = queueStreamer;
       currentStream = new Livestream(currentStreamer);
+      System.out.println("New live stream created: ");
+      System.out.println("Time remaining: " + currentStream.getTimer().getSecondsLeftOfLivestream());
       url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     } else {
+      System.out.println(3);
       url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     }
 
@@ -132,7 +137,12 @@ public class StreamController {
   public @ResponseBody boolean leaveStreamQueue(@RequestParam String userName, @RequestParam Integer key) {
     if (userName.hashCode() != key)
       return false;
-    return queue.removeStreamer(userName);
+    else {
+      if (currentStream != null && currentStreamer == queue.getCurrentStreamer()) {
+        currentStream.getTimer().timer.cancel();
+      }
+      return queue.removeStreamer(userName);
+    }
   }
 
   /**
@@ -155,11 +165,10 @@ public class StreamController {
 
   @CrossOrigin
   @GetMapping("/getCurrentStreamer")
-  public @ResponseBody
-  String getCurrentStreamer() {
+  public @ResponseBody String getCurrentStreamer() {
     if (currentStreamer == null) {
-        String dummyStreamer = "Dummy Streamer";
-        return dummyStreamer;
+      String dummyStreamer = "Dummy Streamer";
+      return dummyStreamer;
     }
     return currentStreamer;
   }
@@ -170,8 +179,7 @@ public class StreamController {
    * @return vote count
    */
   @GetMapping("/getVoteCount")
-  public @ResponseBody
-  int getVoteCount() {
+  public @ResponseBody int getVoteCount() {
     return currentStream.getVoteCount();
   }
 
@@ -182,11 +190,10 @@ public class StreamController {
    */
   @CrossOrigin
   @GetMapping("/getRemainingTime")
-  public @ResponseBody
-  long getRemainingTime() {
+  public @ResponseBody long getRemainingTime() {
     if (currentStreamer == null) {
-        long dummyStreamerTime = -1;
-        return dummyStreamerTime;
+      long dummyStreamerTime = -1;
+      return dummyStreamerTime;
     }
     return currentStream.getTimer().getSecondsLeftOfLivestream();
   }
@@ -198,8 +205,7 @@ public class StreamController {
    * @param comment  content of comment
    */
   @PostMapping("/addComment")
-  public @ResponseBody
-  boolean addComment(@RequestParam String userName, @RequestParam String comment) {
+  public @ResponseBody boolean addComment(@RequestParam String userName, @RequestParam String comment) {
     currentStream.addComment(userName, comment);
     return true;
   }
@@ -211,9 +217,8 @@ public class StreamController {
    */
   @CrossOrigin
   @GetMapping("/getComments")
-  public @ResponseBody
-  List<LivestreamComment> getComments() {
-    return currentStream.getComments();
+  public @ResponseBody List<LivestreamComment> getComments() {
+    return currentStream == null ? new ArrayList<>() : currentStream.getComments();
   }
 
   /**

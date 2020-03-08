@@ -4,7 +4,7 @@ import './stream.scss';
 import { Menu, MenuList, MenuButton, MenuLink } from '@reach/menu-button';
 import '@reach/menu-button/styles.css';
 import logo from '../assets/logo.png';
-import Popup from "reactjs-popup";
+import Popup from 'reactjs-popup';
 
 class Stream extends React.Component {
   constructor(props) {
@@ -21,42 +21,9 @@ class Stream extends React.Component {
       key: localStorage.getItem('userSessionKey'),
       streamerName: '',
       timeRemain: '',
-      messages: [
-        {
-          username: 'KingJ0ffrey',
-          message: 'BOW TO ME JON SNOW',
-          key: Date.now()
-        }
-      ],
+      messages: [],
       videoURL: ''
     };
-
-    // this.demoMsgs = [
-    //   'haha',
-    //   'lol',
-    //   'rofl',
-    //   'The North sux',
-    //   'White walkers are fake news.',
-    //   'I AM THE KING. RESPECT ME.',
-    //   'Our CS130 TA is the best',
-    //   'Lannister4Life'
-    // ];
-
-    //todo: Remove. For demo only.
-    // setInterval(() => {
-    //   this.setState(prevState => ({
-    //     messages: [
-    //       ...prevState.messages,
-    //       {
-    //         username: 'KingJ0ffrey',
-    //         message: this.demoMsgs[
-    //           Math.floor(Math.random() * this.demoMsgs.length)
-    //         ],
-    //         key: Date.now()
-    //       }
-    //     ]
-    //   }));
-    // }, 3000);
   }
 
   onChatMessageChange = e => {
@@ -92,17 +59,17 @@ class Stream extends React.Component {
 
   //todo: change username to be the person who is logged in
   onSend = () => {
-    // this.setState(prevState => ({
-    //   messages: [
-    //     ...prevState.messages,
-    //     {
-    //       username: 'Warden0fDaNorth',
-    //       message: prevState.chatMessage,
-    //       key: Date.now()
-    //     }
-    //   ],
-    //   chatMessage: ''
-    // }));
+    this.setState(prevState => ({
+      messages: [
+        ...prevState.messages,
+        {
+          username: this.state.userName,
+          comment: prevState.chatMessage,
+          key: Date.now()
+        }
+      ],
+      chatMessage: ''
+    }));
     //console.log(this.state.chatMessage);
     const form = new FormData();
     form.append('userName', this.state.userName);
@@ -121,9 +88,9 @@ class Stream extends React.Component {
   onUploadVideo = e => {
     this.setState({ inQueue: true });
 
-    var file = e.target.files[0]
+    var file = e.target.files[0];
 
-    var newFileName = this.state.userName + ".mp4";
+    var newFileName = this.state.userName + '.mp4';
     var form = new FormData();
     form.append('file', file, newFileName);
 
@@ -147,82 +114,95 @@ class Stream extends React.Component {
     form.append('userName', this.state.userName);
     form.append('key', this.state.key);
 
-    fetch(
-      `http://localhost:8080/stream/leaveStreamQueue`,
-      {
-        method: 'POST',
-        mode: 'no-cors',
-        body: form
-      }
-    );
+    fetch(`http://localhost:8080/stream/leaveStreamQueue`, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: form
+    });
   };
 
   openModal = e => {
-    console.log("called");
+    console.log('called');
     if (this.state.streamerName !== 'Dummy Streamer') {
-    const userNameQuery = encodeURIComponent(this.state.streamerName);
-    fetch(`http://localhost:8080/app/getUser?userName=${userNameQuery}`, {
+      const userNameQuery = encodeURIComponent(this.state.streamerName);
+      fetch(`http://localhost:8080/app/getUser?userName=${userNameQuery}`, {
         method: 'GET',
         headers: {
-            'Access-Control-Allow-Origin':'*',
-        },
-    })
-    .then((response) => {
-        return response.json();
-    })
-    .then((response) => {
-        this.setState({firstName: response.firstName});
-        this.setState({lastName: response.lastName});
-        this.setState({email: response.email});
-        this.setState({other: response.otherInfo});
-        if (Object.keys(response.socialMediaHandles).length !== 0 ){
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          this.setState({ firstName: response.firstName });
+          this.setState({ lastName: response.lastName });
+          this.setState({ email: response.email });
+          this.setState({ other: response.otherInfo });
+          if (Object.keys(response.socialMediaHandles).length !== 0) {
             if (response.socialMediaHandles['INSTAGRAM'] !== null) {
-                this.setState({instagram: response.socialMediaHandles['INSTAGRAM']});
+              this.setState({
+                instagram: response.socialMediaHandles['INSTAGRAM']
+              });
             }
             if (response.socialMediaHandles['YOUTUBE'] !== null) {
-                this.setState({youtube: response.socialMediaHandles['YOUTUBE']});
+              this.setState({
+                youtube: response.socialMediaHandles['YOUTUBE']
+              });
             }
             if (response.socialMediaHandles['FACEBOOK'] !== null) {
-                this.setState({facebook: response.socialMediaHandles['FACEBOOK']});
+              this.setState({
+                facebook: response.socialMediaHandles['FACEBOOK']
+              });
             }
             if (response.socialMediaHandles['TWITTER'] !== null) {
-                this.setState({twitter: response.socialMediaHandles['TWITTER']});
+              this.setState({
+                twitter: response.socialMediaHandles['TWITTER']
+              });
             }
-        }
-    });
-  } else {
-    //const userNameQuery = encodeURIComponent(this.state.streamerName);
-    fetch('http://localhost:8080/app/getUser?userName=test2', {
+          }
+        });
+    } else {
+      //const userNameQuery = encodeURIComponent(this.state.streamerName);
+      fetch('http://localhost:8080/app/getUser?userName=test2', {
         method: 'GET',
         headers: {
-            'Access-Control-Allow-Origin':'*',
-        },
-    })
-    .then((response) => {
-        return response.json();
-    })
-    .then((response) => {
-        this.setState({firstName: response.firstName});
-        this.setState({lastName: response.lastName});
-        this.setState({email: response.email});
-        this.setState({other: response.otherInfo});
-        if (Object.keys(response.socialMediaHandles).length !== 0 ){
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          this.setState({ firstName: response.firstName });
+          this.setState({ lastName: response.lastName });
+          this.setState({ email: response.email });
+          this.setState({ other: response.otherInfo });
+          if (Object.keys(response.socialMediaHandles).length !== 0) {
             if (response.socialMediaHandles['INSTAGRAM'] !== null) {
-                this.setState({instagram: response.socialMediaHandles['INSTAGRAM']});
+              this.setState({
+                instagram: response.socialMediaHandles['INSTAGRAM']
+              });
             }
             if (response.socialMediaHandles['YOUTUBE'] !== null) {
-                this.setState({youtube: response.socialMediaHandles['YOUTUBE']});
+              this.setState({
+                youtube: response.socialMediaHandles['YOUTUBE']
+              });
             }
             if (response.socialMediaHandles['FACEBOOK'] !== null) {
-                this.setState({facebook: response.socialMediaHandles['FACEBOOK']});
+              this.setState({
+                facebook: response.socialMediaHandles['FACEBOOK']
+              });
             }
             if (response.socialMediaHandles['TWITTER'] !== null) {
-                this.setState({twitter: response.socialMediaHandles['TWITTER']});
+              this.setState({
+                twitter: response.socialMediaHandles['TWITTER']
+              });
             }
-        }
-    });
-  }
-  }
+          }
+        });
+    }
+  };
 
   componentDidUpdate() {
     let container = this.messagesRef.current;
@@ -248,52 +228,68 @@ class Stream extends React.Component {
             document.getElementById('myVideo').load();
           }
         });
-      
+
       fetch(`http://localhost:8080/stream/getCurrentStreamer`, {
         method: 'GET',
         headers: {
-          'Access-Control-Allow-Origin':'*',
+          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-      })
-      .then((response) => {
-        return response.text();
-      })
-      .catch(err => {        
-        const DummyStreamer = 'Dummy Streamer'
-        this.setState({streamerName: DummyStreamer});
-      })
-      .then((response) => {
-        if (typeof response !== 'undefined') {
-          this.setState({streamerName: response});
+          Accept: 'application/json'
         }
-        
-      });
+      })
+        .then(response => {
+          return response.text();
+        })
+        .catch(err => {
+          const DummyStreamer = 'Dummy Streamer';
+          this.setState({ streamerName: DummyStreamer });
+        })
+        .then(response => {
+          if (typeof response !== 'undefined') {
+            this.setState({ streamerName: response });
+          }
+        });
 
       fetch(`http://localhost:8080/stream/getRemainingTime`, {
         method: 'GET',
         headers: {
-          'Access-Control-Allow-Origin':'*',
-        },
-      })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          const DummyStreamerTime = 0
-          this.setState({streamerName: DummyStreamerTime});
+          'Access-Control-Allow-Origin': '*'
         }
       })
-      .then((response) => {
-        this.setState({timeRemain: response});
-      });
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            const DummyStreamerTime = 0;
+            this.setState({ streamerName: DummyStreamerTime });
+          }
+        })
+        .then(response => {
+          this.setState({ timeRemain: response });
+        });
+    }, 2000);
 
-    }, 1000);
+    //get comments
+    setInterval(() => {
+      fetch(`http://localhost:8080/stream/getComments`, {
+        method: 'GET'
+      })
+        .then(res => res.json())
+        .then(comments => this.setState({ messages: comments }));
+    }, 2000);
   }
 
   render() {
-    const { voted, inQueue, userName, key, chatMessage, messages, streamerName, timeRemain } = this.state;
+    const {
+      voted,
+      inQueue,
+      userName,
+      key,
+      chatMessage,
+      messages,
+      streamerName,
+      timeRemain
+    } = this.state;
     const joinQueue = (
       <>
         <button onClick={this.joinQueue}>Join Queue</button>
@@ -323,19 +319,22 @@ class Stream extends React.Component {
             {this.state.inQueue ? leaveQueue : joinQueue}>
           </div>
           <section className="stream">
-            <video id="myVideo" controls autoPlay name="media">
+            <video id="myVideo" autoPlay name="media">
               <source src={this.state.videoURL} type="video/mp4" />
             </video>
           </section>
           <section className="stream-info">
             <div className="streamer-username">
-            <p>Username: {streamerName}</p>
-            <p>Time remaining: {timeRemain} seconds</p>
+              <p>Username: {streamerName}</p>
+              <p>Time remaining: {timeRemain} seconds</p>
             </div>
             <div className="checkProfileButton">
-              <Popup trigger={<button
-                onClick={this.openModal}> Check Profile</button>} position="right center">
-              </Popup>
+              <Popup
+                trigger={
+                  <button onClick={this.openModal}> Check Profile</button>
+                }
+                position="right center"
+              ></Popup>
             </div>
             <div className="voteUpButton">
               <button
@@ -356,9 +355,9 @@ class Stream extends React.Component {
           </section>
           <section className="chat">
             <div ref={this.messagesRef} className="messages">
-              {messages.map(({ username, message, key }) => (
+              {messages.map(({ username, comment, key }) => (
                 <p key={key}>
-                  <span className="bold">{username}</span>: {message}
+                  <span className="bold">{username}</span>: {comment}
                 </p>
               ))}
             </div>

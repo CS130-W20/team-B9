@@ -77,12 +77,14 @@
         width: 100%;
         height: 100%;
         border: none;
+        background-color: black;
       }
     }
 
     .stream-info {
       height: 20vh;
       outline: 1px solid grey;
+      background-color: #ECECEC;
 
       .voteUpButton {
         border: 1px solid black;
