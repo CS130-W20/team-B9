@@ -7,12 +7,9 @@ class Signup extends React.Component {
     super(props);
 
     this.state = {
-      userName: ' ',
-      password: ' ',
+      userName: '',
+      password: '',
       errors: '',
-      // firstName: 'aaa',
-      // lastName:'bbb',
-      // email:'placeholder@gmail.com',
     };
   }
 
@@ -46,7 +43,13 @@ class Signup extends React.Component {
     })
     .then((response) => {
       if (response == 0) {
-        this.setState({errors: "Username taken."});
+        if (this.state.userName == '') {
+          this.setState({ errors: "Please enter username" });
+        } else if (this.state.password == '') {
+          this.setState({ errors: "Please enter password" });
+        } else {
+          this.setState({ errors: "Username taken" });
+        }
       }
       else{
         localStorage.setItem('userSessionKey', response);
@@ -80,7 +83,7 @@ class Signup extends React.Component {
             <div className="form-input">
               <label htmlFor="password">Password</label>
               <input
-                type="text"
+                type="password"
                 name="password"
                 value={password}
                 onChange={this.onPasswordChange}

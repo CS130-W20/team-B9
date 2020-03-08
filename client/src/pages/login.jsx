@@ -8,7 +8,8 @@ class Login extends React.Component {
 
     this.state = {
       userName: '',
-      password: ''
+      password: '',
+      errors: '',
     };
   }
 
@@ -28,27 +29,36 @@ class Login extends React.Component {
         form.append(name, this.state[name]);
       }
 
-      try {
       fetch('http://localhost:8080/app/login', {
         method: 'POST',
-        mode: 'no-cors',
+        headers: {
+          'Access-Control-Allow-Origin':'*'
+        },
         body: form
       })
-      .then(function(response) {
+      .then((response) => {
         return response.json();
       })
-      .then(function(response) {
-        this.setState({ key: response });
+      .then((response) => {
+        if (response == 0) {
+          if (this.state.userName == '') {
+            this.setState({ errors: "Please enter username" });
+          } else if (this.state.password == '') {
+            this.setState({ errors: "Please enter password" });
+          } else {
+            this.setState({ errors: "Wrong username or password" });
+          }
+        }
+        else {
+          localStorage.setItem('userSessionKey', response);
+          localStorage.setItem('userName', this.state.userName);
+          this.props.history.push('/stream');
+        }
       });
-      
-      //this.props.history.push('/stream');
-    } catch (e) {
-      alert(e.message);
-    }
   };
 
   render() {
-    const { userName, password } = this.state;
+    const { userName, password, errors } = this.state;
 
     return (
       <div className="login-page">
@@ -56,8 +66,8 @@ class Login extends React.Component {
           <p>Log In</p>
         </section>
         <section className="body">
-          {/* todo: submit form to correct endpoint */}
           <form onSubmit={this.handleSubmit} id="form">
+            <p>{errors}</p>
             <div className="form-input">
               <label htmlFor="userName">Username</label>
               <input

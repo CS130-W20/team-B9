@@ -70,7 +70,7 @@ public class MainController {
         Optional<User> user = getUser(userName);
 
         if (!user.isPresent()) {
-            return null;
+            return 0;
         }
 
         if (user.get().checkPassword(password)) {
@@ -82,7 +82,7 @@ public class MainController {
         //System.out.println("login success" );
         //System.out.println(userName);
 
-        return null;
+        return 0;
     }
 
     /**
