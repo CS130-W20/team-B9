@@ -50,15 +50,11 @@ public class StreamController {
             urlResource = amazonS3ClientService.getResourceFromS3Bucket("ucla.mp4");
             region = resourceRegion(urlResource, headers);
         } else if (!queueStreamer.equals(currentStreamer)) {
-            System.err.println("2");
             currentStreamer = queueStreamer;
             urlResource = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
             currentStream = new Livestream(currentStreamer);
-//            builder.header("Refresh", "0");
             return null;
-//            region = resourceRegion(urlResource, null);
         } else {
-            System.err.println("3");
             region = resourceRegion(urlResource, headers);
         }
         builder.contentType(MediaTypeFactory.getMediaType(urlResource).orElse(MediaType.APPLICATION_OCTET_STREAM));
