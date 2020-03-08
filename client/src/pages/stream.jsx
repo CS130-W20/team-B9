@@ -145,7 +145,12 @@ class Stream extends React.Component {
 
     // scroll to bottom if isScrolledToBottom
     if (isScrolledToBottom) container.scrollTop = container.scrollHeight;
+    // document.getElementById('myVideo').load();
   }
+
+  // componentDidMount() {
+  //   this.setState({ videoUrl: 'http://localhost:8080/stream/get' });
+  // }
 
   render() {
     const { voted, inQueue, userName, key, chatMessage, messages } = this.state;
@@ -178,7 +183,7 @@ class Stream extends React.Component {
             {this.state.inQueue ? leaveQueue : joinQueue}>
           </div>
           <section className="stream">
-            <video controls autoPlay name="media">
+            <video id="myVideo" controls autoPlay name="media">
               <source src="http://localhost:8080/stream/get" type="video/mp4" />
             </video>
           </section>
