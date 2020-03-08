@@ -42,14 +42,14 @@ public class MainController {
 
         User newUser = new User();
         newUser.setUserName(userName);
-        newUser.setFirstName(firstName);
-        newUser.setLastName(lastName);
-        newUser.setEmail(email);
+        newUser.setFirstName('');
+        newUser.setLastName('');
+        newUser.setEmail('');
         newUser.setPassword(password);
         userRepository.save(newUser);
         
-        System.out.println("user created" );
-        System.out.println(userName);
+        //System.out.println("user created" );
+        //System.out.println(userName);
         return userName.hashCode();
     }
 
@@ -75,8 +75,8 @@ public class MainController {
             return userName.hashCode();
         }
 
-        System.out.println("login success" );
-        System.out.println(userName);
+        //System.out.println("login success" );
+        //System.out.println(userName);
 
         return null;
     }

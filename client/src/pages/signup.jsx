@@ -11,7 +11,8 @@ class Signup extends React.Component {
       password: '',
       firstName: 'aaa',
       lastName:'bbb',
-      email:'placeholder@gmail.com'
+      email:'placeholder@gmail.com',
+      key: ''
     };
   }
 
@@ -28,7 +29,9 @@ class Signup extends React.Component {
     const form  = new FormData();
 
     for(const name in this.state) {
-      form.append(name, this.state[name]);
+      if (name != 'key') {
+        form.append(name, this.state[name]);
+      }
     }
   
     try {
@@ -36,6 +39,12 @@ class Signup extends React.Component {
       method: 'POST',
       mode: 'no-cors',
       body: form
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(response) {
+      this.setState({ key: response });
     });
   } catch (e) {
     alert(e.message);

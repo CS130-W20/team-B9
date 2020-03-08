@@ -33,8 +33,13 @@ class Login extends React.Component {
         method: 'POST',
         mode: 'no-cors',
         body: form
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(response) {
+        this.setState({ key: response });
       });
-
       
       //this.props.history.push('/stream');
     } catch (e) {

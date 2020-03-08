@@ -18,6 +18,10 @@ class Stream extends React.Component {
     this.messagesRef = React.createRef();
 
     this.state = {
+      currentStream: {
+        streamerName: '',
+        timeRemain:''
+      },
       chatMessage: '',
       voted: false,
       inqueue: false,
@@ -104,6 +108,13 @@ class Stream extends React.Component {
     ],
     chatMessage: ''
   }));
+  const form = new FormData();
+  form.append(this.state.userName, this.state.chatMessage);
+  fetch('http://localhost:8080/addComment', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: form
+    });
 };
 
 onQueue = e => {
@@ -172,10 +183,16 @@ componentDidUpdate() {
             ></iframe>
           </section>
           <section className="stream-info">
-            <div className="voteButtons">
-              <button 
+            <div className="streamer-username">
+              <p>Username</p>
+              <p>Time remaining:</p>
+            </div>
+            <div className="voteUpButton">
+              <button
               disabled={this.state.voted}
               onClick={this.onVoteUp.bind(this)}>+5 Seconds</button>
+            </div>
+            <div className="voteDownButton">
               <button 
               disabled={this.state.voted}
               onClick={this.onVoteDown.bind(this)}>-2 Seconds</button>
