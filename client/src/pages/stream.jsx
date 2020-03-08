@@ -9,7 +9,6 @@ import Popup from "reactjs-popup";
 class Stream extends React.Component {
   constructor(props) {
     super(props);
-    this.openModal = this.openModal.bind(this);
 
     this.messagesRef = React.createRef();
 
@@ -20,6 +19,14 @@ class Stream extends React.Component {
       userName: localStorage.getItem('userName'),
       key: localStorage.getItem('userSessionKey'),
       streamerName: '',
+      streamerFirstName: '',
+      streamerLastName: '',
+      streamerEmail: '',
+      streamerInstagram: '',
+      streamerYoutube: '',
+      streamerFacebook: '',
+      streamerOther: '',
+      // streamertwitter: '',
       timeRemain: '',
       messages: [
         {
@@ -30,33 +37,6 @@ class Stream extends React.Component {
       ],
       videoURL: ''
     };
-
-    // this.demoMsgs = [
-    //   'haha',
-    //   'lol',
-    //   'rofl',
-    //   'The North sux',
-    //   'White walkers are fake news.',
-    //   'I AM THE KING. RESPECT ME.',
-    //   'Our CS130 TA is the best',
-    //   'Lannister4Life'
-    // ];
-
-    //todo: Remove. For demo only.
-    // setInterval(() => {
-    //   this.setState(prevState => ({
-    //     messages: [
-    //       ...prevState.messages,
-    //       {
-    //         username: 'KingJ0ffrey',
-    //         message: this.demoMsgs[
-    //           Math.floor(Math.random() * this.demoMsgs.length)
-    //         ],
-    //         key: Date.now()
-    //       }
-    //     ]
-    //   }));
-    // }, 3000);
   }
 
   onChatMessageChange = e => {
@@ -157,72 +137,10 @@ class Stream extends React.Component {
     );
   };
 
-  openModal = e => {
+  onCheckProfile = e => {
     console.log("called");
-    if (this.state.streamerName !== 'Dummy Streamer') {
-    const userNameQuery = encodeURIComponent(this.state.streamerName);
-    fetch(`http://localhost:8080/app/getUser?userName=${userNameQuery}`, {
-        method: 'GET',
-        headers: {
-            'Access-Control-Allow-Origin':'*',
-        },
-    })
-    .then((response) => {
-        return response.json();
-    })
-    .then((response) => {
-        this.setState({firstName: response.firstName});
-        this.setState({lastName: response.lastName});
-        this.setState({email: response.email});
-        this.setState({other: response.otherInfo});
-        if (Object.keys(response.socialMediaHandles).length !== 0 ){
-            if (response.socialMediaHandles['INSTAGRAM'] !== null) {
-                this.setState({instagram: response.socialMediaHandles['INSTAGRAM']});
-            }
-            if (response.socialMediaHandles['YOUTUBE'] !== null) {
-                this.setState({youtube: response.socialMediaHandles['YOUTUBE']});
-            }
-            if (response.socialMediaHandles['FACEBOOK'] !== null) {
-                this.setState({facebook: response.socialMediaHandles['FACEBOOK']});
-            }
-            if (response.socialMediaHandles['TWITTER'] !== null) {
-                this.setState({twitter: response.socialMediaHandles['TWITTER']});
-            }
-        }
-    });
-  } else {
-    //const userNameQuery = encodeURIComponent(this.state.streamerName);
-    fetch('http://localhost:8080/app/getUser?userName=test2', {
-        method: 'GET',
-        headers: {
-            'Access-Control-Allow-Origin':'*',
-        },
-    })
-    .then((response) => {
-        return response.json();
-    })
-    .then((response) => {
-        this.setState({firstName: response.firstName});
-        this.setState({lastName: response.lastName});
-        this.setState({email: response.email});
-        this.setState({other: response.otherInfo});
-        if (Object.keys(response.socialMediaHandles).length !== 0 ){
-            if (response.socialMediaHandles['INSTAGRAM'] !== null) {
-                this.setState({instagram: response.socialMediaHandles['INSTAGRAM']});
-            }
-            if (response.socialMediaHandles['YOUTUBE'] !== null) {
-                this.setState({youtube: response.socialMediaHandles['YOUTUBE']});
-            }
-            if (response.socialMediaHandles['FACEBOOK'] !== null) {
-                this.setState({facebook: response.socialMediaHandles['FACEBOOK']});
-            }
-            if (response.socialMediaHandles['TWITTER'] !== null) {
-                this.setState({twitter: response.socialMediaHandles['TWITTER']});
-            }
-        }
-    });
-  }
-  }
+    
+}
 
   componentDidUpdate() {
     let container = this.messagesRef.current;
@@ -263,12 +181,62 @@ class Stream extends React.Component {
       .catch(err => {        
         const DummyStreamer = 'Dummy Streamer'
         this.setState({streamerName: DummyStreamer});
+          this.setState({streamerFirstName: 'DSFirstName'});
+          this.setState({streamerLastName: 'DSLastName'});
+          this.setState({streamerEmail: 'DSEmail@gmail.com'});
+          this.setState({streamerOther:  'This is a dummy streamer'});
+          this.setState({streamerInstagram: 'DSInsta'});
+          this.setState({streamerYoutube: 'DSYoutube'});
+          this.setState({streamerFacebook: 'DSFacebook'});
+          // this.setState({twitter: response.socialMediaHandles['TWITTER']});
       })
       .then((response) => {
         if (typeof response !== 'undefined') {
-          this.setState({streamerName: response});
+          if (this.state.streamerName !== response && this.state.streamerName !== 'Dummy Streamer' && this.state.streamerName !== '') {
+            this.setState({streamerName: response});
+            const userNameQuery = encodeURIComponent(this.state.streamerName);
+            fetch(`http://localhost:8080/app/getUser?userName=${userNameQuery}`, {
+                method: 'GET',
+                headers: {
+                    'Access-Control-Allow-Origin':'*',
+                },
+            })
+            .then((response) => {
+              return response.json();
+            })
+           .then((response) => {
+              this.setState({streamerFirstName: response.firstName});
+              this.setState({streamerLastName: response.lastName});
+              this.setState({streamerEmail: response.email});
+              this.setState({streamOther: response.otherInfo});
+              if (Object.keys(response.socialMediaHandles).length !== 0 ){
+                  if (response.socialMediaHandles['INSTAGRAM'] !== null) {
+                      this.setState({streamerInstagram: response.socialMediaHandles['INSTAGRAM']});
+                  }
+                  if (response.socialMediaHandles['YOUTUBE'] !== null) {
+                      this.setState({streamerYoutube: response.socialMediaHandles['YOUTUBE']});
+                  }
+                  if (response.socialMediaHandles['FACEBOOK'] !== null) {
+                      this.setState({streamerFacebook: response.socialMediaHandles['FACEBOOK']});
+                  }
+                  // if (response.socialMediaHandles['TWITTER'] !== null) {
+                  //     this.setState({streamerTwitter: response.socialMediaHandles['TWITTER']});
+                  // }
+              }
+          });
         }
-        
+        else {
+          this.setState({streamerName: 'Dummy Streamer'});
+          this.setState({streamerFirstName: 'DSFirstName'});
+          this.setState({streamerLastName: 'DSLastName'});
+          this.setState({streamerEmail: 'DSEmail@gmail.com'});
+          this.setState({streamerOther:  'This is a dummy streamer'});
+          this.setState({streamerInstagram: 'DSInsta'});
+          this.setState({streamerYoutube: 'DSYoutube'});
+          this.setState({streamerFacebook: 'DSFacebook'});
+          // this.setState({twitter: response.socialMediaHandles['TWITTER']});
+        }
+      } 
       });
 
       fetch(`http://localhost:8080/stream/getRemainingTime`, {
@@ -293,7 +261,8 @@ class Stream extends React.Component {
   }
 
   render() {
-    const { voted, inQueue, userName, key, chatMessage, messages, streamerName, timeRemain } = this.state;
+    const { voted, inQueue, userName, key, chatMessage, messages, streamerName, timeRemain, streamerFirstName, streamerLastName,
+    streamerEmail, streamerOther, streamerFacebook, streamerInstagram, streamerYoutube} = this.state;
     const joinQueue = (
       <>
         <button onClick={this.joinQueue}>Join Queue</button>
@@ -333,9 +302,47 @@ class Stream extends React.Component {
             <p>Time remaining: {timeRemain} seconds</p>
             </div>
             <div className="checkProfileButton">
-              <Popup trigger={<button
-                onClick={this.openModal}> Check Profile</button>} position="right center">
-              </Popup>
+              {/* <Popup trigger={<button
+                onClick={this.onCheckProfile.bind(this)}> Check Profile</button>} position="right center">
+                <span> Modal content </span>
+              </Popup> */}
+              <Popup trigger={<button className="button" onClick={this.onCheckProfile.bind(this)}> Check Profile </button>} modal>
+                {close => (
+                  <div className="modal">
+                  <a className="close" onClick={close}>
+                    &times;
+                  </a>
+                <div className="header"> Username: {streamerName}</div>
+                <div className="content">
+                    {" "}
+                    First Name: {streamerFirstName}
+                    <br />
+                    Last Name: {streamerLastName}
+                    <br />
+                    Email: {streamerEmail}
+                    <br />
+                    Instagram: {streamerInstagram}
+                    <br />
+                    Youtube: {streamerYoutube}
+                    <br />
+                    Facebook: {streamerFacebook}
+                    <br />
+                    Other: {streamerOther}
+                    <br />
+                </div>
+                <div className="closeProfile">
+                  <button
+                    className="button"
+                      onClick={() => {
+                      close();
+                    }}
+                  >
+            Close Profile
+          </button>
+        </div>
+      </div>
+    )}
+  </Popup>
             </div>
             <div className="voteUpButton">
               <button
