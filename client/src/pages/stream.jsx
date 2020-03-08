@@ -4,23 +4,23 @@ import './stream.scss';
 import { Menu, MenuList, MenuButton, MenuLink } from '@reach/menu-button';
 import '@reach/menu-button/styles.css';
 import logo from '../assets/logo.png';
+import Popup from "reactjs-popup";
 
 class Stream extends React.Component {
   constructor(props) {
     super(props);
+    this.openModal = this.openModal.bind(this);
 
     this.messagesRef = React.createRef();
 
     this.state = {
-      currentStream: {
-        streamerName: '',
-        timeRemain: ''
-      },
       chatMessage: '',
       voted: false,
       inQueue: false,
-      userName: '',
-      key: 0,
+      userName: localStorage.getItem('userName'),
+      key: localStorage.getItem('userSessionKey'),
+      streamerName: '',
+      timeRemain: '',
       messages: [
         {
           username: 'KingJ0ffrey',
@@ -31,32 +31,32 @@ class Stream extends React.Component {
       videoURL: ''
     };
 
-    this.demoMsgs = [
-      'haha',
-      'lol',
-      'rofl',
-      'The North sux',
-      'White walkers are fake news.',
-      'I AM THE KING. RESPECT ME.',
-      'Our CS130 TA is the best',
-      'Lannister4Life'
-    ];
+    // this.demoMsgs = [
+    //   'haha',
+    //   'lol',
+    //   'rofl',
+    //   'The North sux',
+    //   'White walkers are fake news.',
+    //   'I AM THE KING. RESPECT ME.',
+    //   'Our CS130 TA is the best',
+    //   'Lannister4Life'
+    // ];
 
     //todo: Remove. For demo only.
-    setInterval(() => {
-      this.setState(prevState => ({
-        messages: [
-          ...prevState.messages,
-          {
-            username: 'KingJ0ffrey',
-            message: this.demoMsgs[
-              Math.floor(Math.random() * this.demoMsgs.length)
-            ],
-            key: Date.now()
-          }
-        ]
-      }));
-    }, 3000);
+    // setInterval(() => {
+    //   this.setState(prevState => ({
+    //     messages: [
+    //       ...prevState.messages,
+    //       {
+    //         username: 'KingJ0ffrey',
+    //         message: this.demoMsgs[
+    //           Math.floor(Math.random() * this.demoMsgs.length)
+    //         ],
+    //         key: Date.now()
+    //       }
+    //     ]
+    //   }));
+    // }, 3000);
   }
 
   onChatMessageChange = e => {
@@ -72,7 +72,7 @@ class Stream extends React.Component {
 
   onVoteUp = e => {
     if (this.state.voted === false) {
-      this.setState({ voted: true });
+      //this.setState({ voted: true });
       fetch('http://localhost:8080/stream/upvote', {
         method: 'POST',
         mode: 'no-cors'
@@ -82,8 +82,8 @@ class Stream extends React.Component {
 
   onVoteDown = e => {
     if (this.state.voted === false) {
-      this.setState({ voted: true });
-      fetch('http://localhost:8080/stream/vote', {
+      //this.setState({ voted: true });
+      fetch('http://localhost:8080/stream/downvote', {
         method: 'POST',
         mode: 'no-cors'
       });
@@ -92,20 +92,22 @@ class Stream extends React.Component {
 
   //todo: change username to be the person who is logged in
   onSend = () => {
-    this.setState(prevState => ({
-      messages: [
-        ...prevState.messages,
-        {
-          username: 'Warden0fDaNorth',
-          message: prevState.chatMessage,
-          key: Date.now()
-        }
-      ],
-      chatMessage: ''
-    }));
+    // this.setState(prevState => ({
+    //   messages: [
+    //     ...prevState.messages,
+    //     {
+    //       username: 'Warden0fDaNorth',
+    //       message: prevState.chatMessage,
+    //       key: Date.now()
+    //     }
+    //   ],
+    //   chatMessage: ''
+    // }));
+    //console.log(this.state.chatMessage);
     const form = new FormData();
-    form.append(this.state.userName, this.state.chatMessage);
-    fetch('http://localhost:8080/addComment', {
+    form.append('userName', this.state.userName);
+    form.append('comment', this.state.chatMessage);
+    fetch('http://localhost:8080/stream/addComment', {
       method: 'POST',
       mode: 'no-cors',
       body: form
@@ -119,11 +121,17 @@ class Stream extends React.Component {
   onUploadVideo = e => {
     this.setState({ inQueue: true });
 
-    const form = new FormData();
-    form.append('file', e.target.files[0]);
+    var file = e.target.files[0]
 
+    var newFileName = this.state.userName + ".mp4";
+    var form = new FormData();
+    form.append('file', file, newFileName);
+
+    const userNameQuery = encodeURIComponent(this.state.userName);
+    const keyQuery = encodeURIComponent(this.state.key);
+    console.log(userNameQuery);
     fetch(
-      `http://localhost:8080/stream/upload?userName=${'bruce'}&key=${'94016839'}`,
+      `http://localhost:8080/stream/upload?userName=${userNameQuery}&key=${keyQuery}`,
       {
         method: 'POST',
         mode: 'no-cors',
@@ -136,8 +144,8 @@ class Stream extends React.Component {
     this.setState({ inQueue: false });
 
     const form = new FormData();
-    form.append('userName', 'bruce');
-    form.append('key', '94016839');
+    form.append('userName', this.state.userName);
+    form.append('key', this.state.key);
 
     fetch(
       `http://localhost:8080/stream/leaveStreamQueue`,
@@ -148,6 +156,73 @@ class Stream extends React.Component {
       }
     );
   };
+
+  openModal = e => {
+    console.log("called");
+    if (this.state.streamerName !== 'Dummy Streamer') {
+    const userNameQuery = encodeURIComponent(this.state.streamerName);
+    fetch(`http://localhost:8080/app/getUser?userName=${userNameQuery}`, {
+        method: 'GET',
+        headers: {
+            'Access-Control-Allow-Origin':'*',
+        },
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .then((response) => {
+        this.setState({firstName: response.firstName});
+        this.setState({lastName: response.lastName});
+        this.setState({email: response.email});
+        this.setState({other: response.otherInfo});
+        if (Object.keys(response.socialMediaHandles).length !== 0 ){
+            if (response.socialMediaHandles['INSTAGRAM'] !== null) {
+                this.setState({instagram: response.socialMediaHandles['INSTAGRAM']});
+            }
+            if (response.socialMediaHandles['YOUTUBE'] !== null) {
+                this.setState({youtube: response.socialMediaHandles['YOUTUBE']});
+            }
+            if (response.socialMediaHandles['FACEBOOK'] !== null) {
+                this.setState({facebook: response.socialMediaHandles['FACEBOOK']});
+            }
+            if (response.socialMediaHandles['TWITTER'] !== null) {
+                this.setState({twitter: response.socialMediaHandles['TWITTER']});
+            }
+        }
+    });
+  } else {
+    //const userNameQuery = encodeURIComponent(this.state.streamerName);
+    fetch('http://localhost:8080/app/getUser?userName=test2', {
+        method: 'GET',
+        headers: {
+            'Access-Control-Allow-Origin':'*',
+        },
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .then((response) => {
+        this.setState({firstName: response.firstName});
+        this.setState({lastName: response.lastName});
+        this.setState({email: response.email});
+        this.setState({other: response.otherInfo});
+        if (Object.keys(response.socialMediaHandles).length !== 0 ){
+            if (response.socialMediaHandles['INSTAGRAM'] !== null) {
+                this.setState({instagram: response.socialMediaHandles['INSTAGRAM']});
+            }
+            if (response.socialMediaHandles['YOUTUBE'] !== null) {
+                this.setState({youtube: response.socialMediaHandles['YOUTUBE']});
+            }
+            if (response.socialMediaHandles['FACEBOOK'] !== null) {
+                this.setState({facebook: response.socialMediaHandles['FACEBOOK']});
+            }
+            if (response.socialMediaHandles['TWITTER'] !== null) {
+                this.setState({twitter: response.socialMediaHandles['TWITTER']});
+            }
+        }
+    });
+  }
+  }
 
   componentDidUpdate() {
     let container = this.messagesRef.current;
@@ -173,11 +248,52 @@ class Stream extends React.Component {
             document.getElementById('myVideo').load();
           }
         });
+      
+      fetch(`http://localhost:8080/stream/getCurrentStreamer`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin':'*',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+      })
+      .then((response) => {
+        return response.text();
+      })
+      .catch(err => {        
+        const DummyStreamer = 'Dummy Streamer'
+        this.setState({streamerName: DummyStreamer});
+      })
+      .then((response) => {
+        if (typeof response !== 'undefined') {
+          this.setState({streamerName: response});
+        }
+        
+      });
+
+      fetch(`http://localhost:8080/stream/getRemainingTime`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin':'*',
+        },
+      })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          const DummyStreamerTime = 0
+          this.setState({streamerName: DummyStreamerTime});
+        }
+      })
+      .then((response) => {
+        this.setState({timeRemain: response});
+      });
+
     }, 1000);
   }
 
   render() {
-    const { voted, inQueue, userName, key, chatMessage, messages } = this.state;
+    const { voted, inQueue, userName, key, chatMessage, messages, streamerName, timeRemain } = this.state;
     const joinQueue = (
       <>
         <button onClick={this.joinQueue}>Join Queue</button>
@@ -213,8 +329,13 @@ class Stream extends React.Component {
           </section>
           <section className="stream-info">
             <div className="streamer-username">
-              <p>Username</p>
-              <p>Time remaining:</p>
+            <p>Username: {streamerName}</p>
+            <p>Time remaining: {timeRemain} seconds</p>
+            </div>
+            <div className="checkProfileButton">
+              <Popup trigger={<button
+                onClick={this.openModal}> Check Profile</button>} position="right center">
+              </Popup>
             </div>
             <div className="voteUpButton">
               <button

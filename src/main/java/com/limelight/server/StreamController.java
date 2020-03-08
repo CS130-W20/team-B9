@@ -67,22 +67,24 @@ public class StreamController {
     // builder.contentType(MediaTypeFactory.getMediaType(urlResource).orElse(MediaType.APPLICATION_OCTET_STREAM));
 
     String url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/ucla.mp4";
-    ;
+    
 
-    System.out.println(amazonS3ClientService.getResourceFromS3Bucket("demo.mp4"));
-    System.out.println("cs " + currentStreamer);
 
     if (queueStreamer == null) {
+        //System.err.println("1");
       currentStreamer = null;
+    //  currentStream = new Livestream("Dummy Streamer");
     } else if (!queueStreamer.equals(currentStreamer)) {
+                //System.err.println("2");
+
       currentStreamer = queueStreamer;
       currentStream = new Livestream(currentStreamer);
       url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     } else {
+                //System.err.println("3");
+
       url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     }
-
-    System.out.println(url);
 
     return builder.body(url);
   }
@@ -140,18 +142,29 @@ public class StreamController {
    * Upvotes the current stream.
    */
   @PostMapping("/upvote")
-  public void upvoteStream() {
+  public @ResponseBody boolean upvoteStream() {
     currentStream.upvote();
-    // System.out.println("voted up" );
+    return true;
   }
 
   /**
    * Downvotes the current stream.
    */
   @PostMapping("/downvote")
-  public void downvoteStream() {
+  public @ResponseBody boolean downvoteStream() {
     currentStream.downvote();
-    // System.out.println("voted down" );
+    return true;
+  }
+
+  @CrossOrigin
+  @GetMapping("/getCurrentStreamer")
+  public @ResponseBody
+  String getCurrentStreamer() {
+    if (currentStreamer == null) {
+        String dummyStreamer = "Dummy Streamer";
+        return dummyStreamer;
+    }
+    return currentStreamer;
   }
 
   /**
@@ -160,7 +173,8 @@ public class StreamController {
    * @return vote count
    */
   @GetMapping("/getVoteCount")
-  public int getVoteCount() {
+  public @ResponseBody
+  int getVoteCount() {
     return currentStream.getVoteCount();
   }
 
@@ -169,8 +183,14 @@ public class StreamController {
    *
    * @return time remaining
    */
+  @CrossOrigin
   @GetMapping("/getRemainingTime")
-  public long getRemainingTime() {
+  public @ResponseBody
+  long getRemainingTime() {
+    if (currentStreamer == null) {
+        long dummyStreamerTime = -1;
+        return dummyStreamerTime;
+    }
     return currentStream.getTimer().getSecondsLeftOfLivestream();
   }
 
@@ -181,8 +201,10 @@ public class StreamController {
    * @param comment  content of comment
    */
   @PostMapping("/addComment")
-  public void addComment(@RequestParam String userName, @RequestParam String comment) {
+  public @ResponseBody
+  boolean addComment(@RequestParam String userName, @RequestParam String comment) {
     currentStream.addComment(userName, comment);
+    return true;
   }
 
   /**
@@ -190,8 +212,10 @@ public class StreamController {
    *
    * @return list of comments
    */
+  @CrossOrigin
   @GetMapping("/getComments")
-  public List<LivestreamComment> getComments() {
+  public @ResponseBody
+  List<LivestreamComment> getComments() {
     return currentStream.getComments();
   }
 

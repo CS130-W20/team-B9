@@ -77,6 +77,9 @@ public class Livestream {
         comments.add(new LivestreamComment(username, comment));
     }
 
+    public void clearComments() {
+        comments.clear();
+    }
     /**
      * Get a list of comments on the current stream.
      * @return list of comments on the current stream
