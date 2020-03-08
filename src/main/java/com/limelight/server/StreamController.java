@@ -19,13 +19,15 @@ public class StreamController {
 
     private StreamQueue queue;
 
-    public StreamController() {
-        queue = StreamQueue.getInstance();
-    }
-
     private String currentStreamer;
 
     private Livestream currentStream;
+
+    private UrlResource urlResource;
+
+    public StreamController() {
+        queue = StreamQueue.getInstance();
+    }
 
     /**
      * Serves part of the stream currently at the front of the {@link StreamQueue} contained in the header.
@@ -38,18 +40,31 @@ public class StreamController {
     public ResponseEntity<ResourceRegion> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
         String queueStreamer = queue.getCurrentStreamer();
 
+        // TODO: if streamer is null, then the queue is empty, so redirect user to some other page
+        if (queueStreamer == null) {
+            // redirect
+        }
+
         if (!queueStreamer.equals(currentStreamer)) {
             currentStreamer = queueStreamer;
+            urlResource = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
             currentStream = new Livestream(currentStreamer);
         }
 
-        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
-        ResourceRegion region = resourceRegion(stream, headers);
+        ResourceRegion region = resourceRegion(urlResource, headers);
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)    // return HTTP code 206 to indicate partial video
-                .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
+                .contentType(MediaTypeFactory.getMediaType(urlResource).orElse(MediaType.APPLICATION_OCTET_STREAM))
                 .body(region);
     }
 
+    /**
+     * Uploads a user's stream video to the S3 database and adds them to the {@link StreamQueue}.
+     *
+     * @param file video stream to be uploaded
+     * @param userName of streamer
+     * @param key session key
+     * @return redirect user to post-upload page
+     */
     @PostMapping("/stream/upload")
     public RedirectView uploadStream(@RequestPart(value = "file") MultipartFile file,
                                      @RequestParam String userName,
@@ -59,7 +74,7 @@ public class StreamController {
         joinStreamQueue(userName, key);
 
         // TODO: redirect to waiting page
-        return new RedirectView("/stream/get");
+        return new RedirectView("/");
     }
 
     /**
@@ -82,7 +97,7 @@ public class StreamController {
      *
      * @param userName userName to remove from stream queue
      * @param key      user's key to ensure it is authorized user
-     * @return ture if user was removed from stream queue, false otherwise
+     * @return true if user was removed from stream queue, false otherwise
      */
     @PostMapping(path = "/leaveStreamQueue")
     public @ResponseBody
@@ -92,51 +107,59 @@ public class StreamController {
         return queue.removeStreamer(userName);
     }
 
+    /**
+     * Upvotes the current stream.
+     */
     @PostMapping("/stream/upvote")
     public void upvoteStream() {
         currentStream.upvote();
         //System.out.println("voted up" );
     }
 
+    /**
+     * Downvotes the current stream.
+     */
     @PostMapping("/stream/downvote")
     public void downvoteStream() {
         currentStream.downvote();
         //System.out.println("voted down" );
     }
 
+    /**
+     * Gets the vote count for the current stream.
+     * @return vote count
+     */
     @GetMapping("/stream/getVoteCount")
     public int getVoteCount() {
         return currentStream.getVoteCount();
     }
 
+    /**
+     * Gets the time remaining for the current stream.
+     * @return time remaining
+     */
     @GetMapping("/stream/getRemainingTime")
     public long getRemainingTime() {
         return currentStream.getTimer().getSecondsLeftOfLivestream();
     }
 
+    /**
+     * Adds a comment to the current stream.
+     * @param userName of commenter
+     * @param comment content of comment
+     */
     @PostMapping("/stream/addComment")
     public void addComment(@RequestParam String userName, @RequestParam String comment) {
         currentStream.addComment(userName, comment);
     }
 
+    /**
+     * Gets list of comments on current stream.
+     * @return list of comments
+     */
     @GetMapping("/stream/getComments")
     public List<LivestreamComment> getComments() {
         return currentStream.getComments();
-    }
-
-    /**
-     * Serves the full stream currently at the front of the {@link StreamQueue}.
-     * Primarily used for debugging purposes.
-     *
-     * @return ResponseEntity<UrlResource> representing the full video stream
-     * @throws Exception if malformed URL is accessed
-     */
-    @GetMapping("/stream/get/full")
-    private ResponseEntity<UrlResource> getFullVideo() throws Exception {
-        UrlResource stream = new UrlResource("file:C:\\Users\\admin\\Desktop\\SampleVideo_720x480_30mb.mp4");
-        return ResponseEntity.status(HttpStatus.OK)     // return HTTP code 200 to indicate full video
-                .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
-                .body(stream);
     }
 
     /**
@@ -170,6 +193,6 @@ public class StreamController {
      * @return file name of user's stream
      */
     private String getStreamFromUser(String userName) {
-        return String.format("%d.mp4", userName);
+        return String.format("%s.mp4", userName);
     }
 }
