@@ -183,7 +183,9 @@ class Stream extends React.Component {
       })
       .then((response) => {
         if (typeof response !== 'undefined') {
-          if (this.state.streamerName !== response && this.state.streamerName !== 'Dummy Streamer' && this.state.streamerName !== '') {
+          console.log(response);
+          //console.log(this.state.streamerName);
+          if (this.state.streamerName !== response && response !== '' && response !== 'Dummy Streamer') {
             this.setState({streamerName: response});
             const userNameQuery = encodeURIComponent(this.state.streamerName);
             fetch(`http://localhost:8080/app/getUser?userName=${userNameQuery}`, {
@@ -196,10 +198,12 @@ class Stream extends React.Component {
               return response.json();
             })
            .then((response) => {
+            if (typeof response !== 'undefined') {
+              console.log(response);
               this.setState({streamerFirstName: response.firstName});
               this.setState({streamerLastName: response.lastName});
               this.setState({streamerEmail: response.email});
-              this.setState({streamOther: response.otherInfo});
+              this.setState({streamerOther: response.otherInfo});
               if (Object.keys(response.socialMediaHandles).length !== 0 ){
                   if (response.socialMediaHandles['INSTAGRAM'] !== null) {
                       this.setState({streamerInstagram: response.socialMediaHandles['INSTAGRAM']});
@@ -214,9 +218,10 @@ class Stream extends React.Component {
                   //     this.setState({streamerTwitter: response.socialMediaHandles['TWITTER']});
                   // }
               }
+            }
           });
         }
-        else {
+        else if (this.state.streamerName === 'Dummy Streamer' || (response === 'Dummy Streamer')){
           this.setState({streamerName: 'Dummy Streamer'});
           this.setState({streamerFirstName: 'DSFirstName'});
           this.setState({streamerLastName: 'DSLastName'});
@@ -247,7 +252,7 @@ class Stream extends React.Component {
         .then(response => {
           this.setState({ timeRemain: response });
         });
-    }, 2000);
+    }, 1000);
 
     //get comments
     setInterval(() => {
