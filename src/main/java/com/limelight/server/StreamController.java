@@ -41,8 +41,9 @@ public class StreamController {
    *         the video stream
    * @throws Exception if malformed URL is accessed
    */
+  @CrossOrigin
   @GetMapping("/get")
-  public ResponseEntity<ResourceRegion> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
+  public ResponseEntity<String> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
     String queueStreamer = queue.getCurrentStreamer();
     ResourceRegion region;
 
@@ -50,21 +51,40 @@ public class StreamController {
                                                                                            // indicate partial video
         .cacheControl(CacheControl.noStore().mustRevalidate());
 
+    // if (queueStreamer == null) {
+    // currentStreamer = null;
+    // urlResource = amazonS3ClientService.getResourceFromS3Bucket("demo.mp4");
+    // region = resourceRegion(urlResource, headers);
+    // } else if (!queueStreamer.equals(currentStreamer)) {
+    // currentStreamer = queueStreamer;
+    // urlResource =
+    // amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
+    // currentStream = new Livestream(currentStreamer);
+    // return null;
+    // } else {
+    // region = resourceRegion(urlResource, headers);
+    // }
+    // builder.contentType(MediaTypeFactory.getMediaType(urlResource).orElse(MediaType.APPLICATION_OCTET_STREAM));
+
+    String url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/ucla.mp4";
+    ;
+
+    System.out.println(amazonS3ClientService.getResourceFromS3Bucket("demo.mp4"));
+    System.out.println("cs " + currentStreamer);
+
     if (queueStreamer == null) {
       currentStreamer = null;
-      urlResource = amazonS3ClientService.getResourceFromS3Bucket("ucla.mp4");
-      region = resourceRegion(urlResource, headers);
     } else if (!queueStreamer.equals(currentStreamer)) {
       currentStreamer = queueStreamer;
-      urlResource = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
       currentStream = new Livestream(currentStreamer);
-      return null;
+      url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     } else {
-      region = resourceRegion(urlResource, headers);
+      url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     }
-    builder.contentType(MediaTypeFactory.getMediaType(urlResource).orElse(MediaType.APPLICATION_OCTET_STREAM));
 
-    return builder.body(region);
+    System.out.println(url);
+
+    return builder.body(url);
   }
 
   /**
@@ -77,13 +97,15 @@ public class StreamController {
    * @return redirect user to post-upload page
    */
   @PostMapping("/upload")
-  public RedirectView uploadStream(@RequestPart(value = "file") MultipartFile file, @RequestParam String userName,
-      @RequestParam Integer key) {
+  public ResponseEntity<String> uploadStream(@RequestPart(value = "file") MultipartFile file,
+      @RequestParam String userName, @RequestParam Integer key) {
     // begin uploading user's video stream file and add them to queue
     amazonS3ClientService.uploadFileToS3Bucket(file, true);
     joinStreamQueue(userName, key);
 
-    return new RedirectView("/");
+    ResponseEntity.BodyBuilder builder = ResponseEntity.status(HttpStatus.OK);
+
+    return builder.body("OK");
   }
 
   /**

@@ -27,7 +27,8 @@ class Stream extends React.Component {
           message: 'BOW TO ME JON SNOW',
           key: Date.now()
         }
-      ]
+      ],
+      videoURL: ''
     };
 
     this.demoMsgs = [
@@ -133,6 +134,19 @@ class Stream extends React.Component {
 
   leaveQueue = e => {
     this.setState({ inQueue: false });
+
+    const form = new FormData();
+    form.append('userName', 'bruce');
+    form.append('key', '94016839');
+
+    fetch(
+      `http://localhost:8080/stream/leaveStreamQueue`,
+      {
+        method: 'POST',
+        mode: 'no-cors',
+        body: form
+      }
+    );
   };
 
   componentDidUpdate() {
@@ -145,12 +159,22 @@ class Stream extends React.Component {
 
     // scroll to bottom if isScrolledToBottom
     if (isScrolledToBottom) container.scrollTop = container.scrollHeight;
-    // document.getElementById('myVideo').load();
   }
 
-  // componentDidMount() {
-  //   this.setState({ videoUrl: 'http://localhost:8080/stream/get' });
-  // }
+  componentDidMount() {
+    setInterval(() => {
+      fetch(`http://localhost:8080/stream/get`, {
+        method: 'GET'
+      })
+        .then(response => response.text())
+        .then(url => {
+          if (this.state.videoURL !== url) {
+            this.setState({ videoURL: url });
+            document.getElementById('myVideo').load();
+          }
+        });
+    }, 1000);
+  }
 
   render() {
     const { voted, inQueue, userName, key, chatMessage, messages } = this.state;
@@ -184,7 +208,7 @@ class Stream extends React.Component {
           </div>
           <section className="stream">
             <video id="myVideo" controls autoPlay name="media">
-              <source src="http://localhost:8080/stream/get" type="video/mp4" />
+              <source src={this.state.videoURL} type="video/mp4" />
             </video>
           </section>
           <section className="stream-info">
