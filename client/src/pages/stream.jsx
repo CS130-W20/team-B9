@@ -46,7 +46,7 @@ class Stream extends React.Component {
 
   onVoteUp = e => {
     if (this.state.voted === false) {
-      //this.setState({ voted: true });
+      this.setState({ voted: true });
       fetch('http://localhost:8080/stream/upvote', {
         method: 'POST',
         mode: 'no-cors'
@@ -56,7 +56,7 @@ class Stream extends React.Component {
 
   onVoteDown = e => {
     if (this.state.voted === false) {
-      //this.setState({ voted: true });
+      this.setState({ voted: true });
       fetch('http://localhost:8080/stream/downvote', {
         method: 'POST',
         mode: 'no-cors'
