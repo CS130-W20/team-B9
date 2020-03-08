@@ -47,6 +47,7 @@ public class StreamController {
                 .cacheControl(CacheControl.noStore().mustRevalidate());
 
         if (queueStreamer == null) {
+            currentStreamer = null;
             urlResource = amazonS3ClientService.getResourceFromS3Bucket("ucla.mp4");
             region = resourceRegion(urlResource, headers);
         } else if (!queueStreamer.equals(currentStreamer)) {
