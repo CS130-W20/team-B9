@@ -21,13 +21,15 @@ public class StreamController {
 
     private StreamQueue queue;
 
-    public StreamController() {
-        queue = StreamQueue.getInstance();
-    }
-
     private String currentStreamer;
 
     private Livestream currentStream;
+
+    private UrlResource urlResource;
+
+    public StreamController() {
+        queue = StreamQueue.getInstance();
+    }
 
     /**
      * Serves part of the stream currently at the front of the {@link StreamQueue} contained in the header.
@@ -50,6 +52,7 @@ public class StreamController {
             region = resourceRegion(urlResource, headers);
         } else if (!queueStreamer.equals(currentStreamer)) {
             currentStreamer = queueStreamer;
+            urlResource = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
             currentStream = new Livestream(currentStreamer);
             return null;
         } else {
@@ -99,7 +102,7 @@ public class StreamController {
      *
      * @param userName userName to remove from stream queue
      * @param key      user's key to ensure it is authorized user
-     * @return ture if user was removed from stream queue, false otherwise
+     * @return true if user was removed from stream queue, false otherwise
      */
     @PostMapping(path = "/leaveStreamQueue")
     public @ResponseBody
@@ -115,7 +118,6 @@ public class StreamController {
     @PostMapping("/upvote")
     public void upvoteStream() {
         currentStream.upvote();
-        System.out.println("voted up" );
     }
 
     /**
@@ -124,7 +126,6 @@ public class StreamController {
     @PostMapping("/downvote")
     public void downvoteStream() {
         currentStream.downvote();
-        System.out.println("voted down" );
     }
 
     /**
@@ -169,21 +170,6 @@ public class StreamController {
     }
 
     /**
-     * Serves the full stream currently at the front of the {@link StreamQueue}.
-     * Primarily used for debugging purposes.
-     *
-     * @return ResponseEntity<UrlResource> representing the full video stream
-     * @throws Exception if malformed URL is accessed
-     */
-    @GetMapping("/stream/get/full")
-    private ResponseEntity<UrlResource> getFullVideo() throws Exception {
-        UrlResource stream = new UrlResource("file:C:\\Users\\admin\\Desktop\\SampleVideo_720x480_30mb.mp4");
-        return ResponseEntity.status(HttpStatus.OK)     // return HTTP code 200 to indicate full video
-                .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
-                .body(stream);
-    }
-
-    /**
      * Returns a portion of a given video based on the "Range" field in the GET request header.
      *
      * @param stream  input stream
@@ -214,6 +200,6 @@ public class StreamController {
      * @return file name of user's stream
      */
     private String getStreamFromUser(String userName) {
-        return String.format("%d.mp4", userName);
+        return String.format("%s.mp4", userName);
     }
 }
