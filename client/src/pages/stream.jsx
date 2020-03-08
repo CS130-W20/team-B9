@@ -1,15 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './stream.scss';
-import {
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuLink,
-} from "@reach/menu-button";
-import "@reach/menu-button/styles.css";
-import logo from '../assets/logo.png'
-
+import { Menu, MenuList, MenuButton, MenuLink } from '@reach/menu-button';
+import '@reach/menu-button/styles.css';
+import logo from '../assets/logo.png';
 
 class Stream extends React.Component {
   constructor(props) {
@@ -20,18 +14,25 @@ class Stream extends React.Component {
     this.state = {
       currentStream: {
         streamerName: '',
-        timeRemain:''
+        timeRemain: ''
       },
       chatMessage: '',
       voted: false,
+<<<<<<< HEAD
       inqueue: false,
+=======
+      inQueue: false,
+      userName: '',
+      key: 0,
+>>>>>>> master
       messages: [
         {
           username: 'KingJ0ffrey',
           message: 'BOW TO ME JON SNOW',
-          key: Date.now(),
+          key: Date.now()
         }
-      ]
+      ],
+      videoURL: ''
     };
 
     this.demoMsgs = [
@@ -75,83 +76,119 @@ class Stream extends React.Component {
 
   onVoteUp = e => {
     if (this.state.voted === false) {
-      this.setState({voted: true});
+      this.setState({ voted: true });
       fetch('http://localhost:8080/stream/upvote', {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'no-cors'
       });
     }
   };
 
   onVoteDown = e => {
     if (this.state.voted === false) {
-      this.setState({voted: true});
+      this.setState({ voted: true });
       fetch('http://localhost:8080/stream/vote', {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'no-cors'
       });
     }
   };
 
- //todo: change username to be the person who is logged in
- onSend = () => {
-  this.setState(prevState => ({
-    messages: [
-      ...prevState.messages,
-      {
-        username: 'Warden0fDaNorth',
-        message: prevState.chatMessage,
-        key: Date.now()
-      }
-    ],
-    chatMessage: ''
-  }));
-  const form = new FormData();
-  form.append(this.state.userName, this.state.chatMessage);
-  fetch('http://localhost:8080/addComment', {
+  //todo: change username to be the person who is logged in
+  onSend = () => {
+    this.setState(prevState => ({
+      messages: [
+        ...prevState.messages,
+        {
+          username: 'Warden0fDaNorth',
+          message: prevState.chatMessage,
+          key: Date.now()
+        }
+      ],
+      chatMessage: ''
+    }));
+    const form = new FormData();
+    form.append(this.state.userName, this.state.chatMessage);
+    fetch('http://localhost:8080/addComment', {
       method: 'POST',
       mode: 'no-cors',
       body: form
     });
-};
+  };
 
-onQueue = e => {
-  if (!this.state.inqueue) {
-    this.setState({inqueue: true});
-    fetch('http://localhost:8080/joinStreamQueue', {
-      method: 'POST',
-      mode: 'no-cors',
-    });
-  } else {
-    this.setState({inqueue: false});
-    fetch('http://localhost:8080/leaveStreamQueue', {
-      method: 'POST',
-      mode: 'no-cors',
-    });
+  joinQueue = e => {
+    document.getElementById('getFile').click();
+  };
+
+  onUploadVideo = e => {
+    this.setState({ inQueue: true });
+
+    const form = new FormData();
+    form.append('file', e.target.files[0]);
+
+    fetch(
+      `http://localhost:8080/stream/upload?userName=${'bruce'}&key=${'94016839'}`,
+      {
+        method: 'POST',
+        mode: 'no-cors',
+        body: form
+      }
+    );
+  };
+
+  leaveQueue = e => {
+    this.setState({ inQueue: false });
+
+    const form = new FormData();
+    form.append('userName', 'bruce');
+    form.append('key', '94016839');
+
+    fetch(
+      `http://localhost:8080/stream/leaveStreamQueue`,
+      {
+        method: 'POST',
+        mode: 'no-cors',
+        body: form
+      }
+    );
+  };
+
+  componentDidUpdate() {
+    let container = this.messagesRef.current;
+
+    // padding top + bottom  + 4px tolerance = 20 (magic number)
+    let isScrolledToBottom =
+      container.scrollHeight - container.clientHeight <=
+      container.scrollTop + 20;
+
+    // scroll to bottom if isScrolledToBottom
+    if (isScrolledToBottom) container.scrollTop = container.scrollHeight;
   }
-}
 
-componentDidUpdate() {
-  let container = this.messagesRef.current;
-
-  // padding top + bottom  + 4px tolerance = 20 (magic number)
-  let isScrolledToBottom =
-    container.scrollHeight - container.clientHeight <=
-    container.scrollTop + 20;
-
-  // scroll to bottom if isScrolledToBottom
-  if (isScrolledToBottom) container.scrollTop = container.scrollHeight;
-}
-
+  componentDidMount() {
+    setInterval(() => {
+      fetch(`http://localhost:8080/stream/get`, {
+        method: 'GET'
+      })
+        .then(response => response.text())
+        .then(url => {
+          if (this.state.videoURL !== url) {
+            this.setState({ videoURL: url });
+            document.getElementById('myVideo').load();
+          }
+        });
+    }, 1000);
+  }
 
   render() {
-    const { voted, inqueue, userName, key, chatMessage, messages } = this.state;
-    const joinqueue = (
-        <button>Join Queue</button>
-    )
-    const leavequeue = (
-      <button>Leave Queue</button>
-    )
+    const { voted, inQueue, userName, key, chatMessage, messages } = this.state;
+    const joinQueue = (
+      <>
+        <button onClick={this.joinQueue}>Join Queue</button>
+        <input type="file" id="getFile" onChange={this.onUploadVideo} />
+      </>
+    );
+    const leaveQueue = <button onClick={this.leaveQueue}>Leave Queue</button>;
     return (
       <div className="stream-page">
         <div className="container">
@@ -161,24 +198,22 @@ componentDidUpdate() {
             <Menu>
               <MenuButton>Option</MenuButton>
               <MenuList>
-                <MenuLink as={Link} to="/myprofile">My Profile</MenuLink>
-                <MenuLink as={Link} to="/">Sign Out</MenuLink>
+                <MenuLink as={Link} to="/myprofile">
+                  My Profile
+                </MenuLink>
+                <MenuLink as={Link} to="/">
+                  Sign Out
+                </MenuLink>
               </MenuList>
             </Menu>
           </div>
-          <div className="queue-button" 
-            onClick={this.onQueue.bind(this)}>
-            {this.state.inqueue ? leavequeue : joinqueue}>
+          <div className="queue-button">
+            {this.state.inQueue ? leaveQueue : joinQueue}>
           </div>
           <section className="stream">
-            <iframe
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/nEhOEfSb5zg?start=57&controls=0"
-              frameBorder="0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+            <video id="myVideo" controls autoPlay name="media">
+              <source src={this.state.videoURL} type="video/mp4" />
+            </video>
           </section>
           <section className="stream-info">
             <div className="streamer-username">
@@ -187,13 +222,19 @@ componentDidUpdate() {
             </div>
             <div className="voteUpButton">
               <button
-              disabled={this.state.voted}
-              onClick={this.onVoteUp.bind(this)}>+5 Seconds</button>
+                disabled={this.state.voted}
+                onClick={this.onVoteUp.bind(this)}
+              >
+                +5 Seconds
+              </button>
             </div>
             <div className="voteDownButton">
-              <button 
-              disabled={this.state.voted}
-              onClick={this.onVoteDown.bind(this)}>-2 Seconds</button>
+              <button
+                disabled={this.state.voted}
+                onClick={this.onVoteDown.bind(this)}
+              >
+                -2 Seconds
+              </button>
             </div>
           </section>
           <section className="chat">
