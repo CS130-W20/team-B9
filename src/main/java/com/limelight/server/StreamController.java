@@ -71,18 +71,15 @@ public class StreamController {
 
 
     if (queueStreamer == null) {
-        //System.err.println("1");
       currentStreamer = null;
-    //  currentStream = new Livestream("Dummy Streamer");
+      if (currentStream != null) {
+        currentStream.clearComments();
+      }
     } else if (!queueStreamer.equals(currentStreamer)) {
-                //System.err.println("2");
-
       currentStreamer = queueStreamer;
       currentStream = new Livestream(currentStreamer);
       url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     } else {
-                //System.err.println("3");
-
       url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     }
 
