@@ -127,14 +127,14 @@ class Stream extends React.Component {
   };
 
   setDummy() {
-    this.setState({streamerName: 'Dummy Streamer'});
-    this.setState({streamerFirstName: 'DSFirstName'});
-    this.setState({streamerLastName: 'DSLastName'});
-    this.setState({streamerEmail: 'DSEmail@gmail.com'});
-    this.setState({streamerOther:  'This is a dummy streamer'});
-    this.setState({streamerInstagram: 'DSInsta'});
-    this.setState({streamerYoutube: 'DSYoutube'});
-    this.setState({streamerFacebook: 'DSFacebook'});
+    this.setState({ streamerName: 'Dummy Streamer' });
+    this.setState({ streamerFirstName: 'DSFirstName' });
+    this.setState({ streamerLastName: 'DSLastName' });
+    this.setState({ streamerEmail: 'DSEmail@gmail.com' });
+    this.setState({ streamerOther: 'This is a dummy streamer' });
+    this.setState({ streamerInstagram: 'DSInsta' });
+    this.setState({ streamerYoutube: 'DSYoutube' });
+    this.setState({ streamerFacebook: 'DSFacebook' });
     // this.setState({twitter: response.socialMediaHandles['TWITTER']});
   }
 
@@ -268,23 +268,40 @@ class Stream extends React.Component {
   }
 
   render() {
-    const { voted, inQueue, userName, key, chatMessage, messages, streamerName, timeRemain, streamerFirstName, streamerLastName,
-      streamerEmail, streamerOther, streamerFacebook, streamerInstagram, streamerYoutube} = this.state;
+    const {
+      voted,
+      inQueue,
+      userName,
+      key,
+      chatMessage,
+      messages,
+      streamerName,
+      timeRemain,
+      streamerFirstName,
+      streamerLastName,
+      streamerEmail,
+      streamerOther,
+      streamerFacebook,
+      streamerInstagram,
+      streamerYoutube
+    } = this.state;
     const joinQueue = (
-        <>
-          <button onClick={this.joinQueue}>Join Queue</button>
-          <input type="file" id="getFile" onChange={this.onUploadVideo} />
-        </>
+      <>
+        <button className="queue" onClick={this.joinQueue}>Join Queue</button>
+        <input type="file" id="getFile" onChange={this.onUploadVideo} />
+      </>
     );
-    const leaveQueue = <button onClick={this.leaveQueue}>Leave Queue</button>;
+    const leaveQueue = <button className="queue leave" onClick={this.leaveQueue}>Leave Queue</button>;
     return (
-        <div className="stream-page">
-          <div className="container">
+      <div className="stream-page">
+        <div className="container">
+          <header>
             <img src={logo} alt="logo" />
-            <header>Limelight</header>
+            <p>Limelight</p>
             <div className="profile-button-container">
+              {this.state.inQueue ? leaveQueue : joinQueue}
               <Menu>
-                <MenuButton>Option</MenuButton>
+                <MenuButton className="menu">☰</MenuButton>
                 <MenuList>
                   <MenuLink as={Link} to="/myprofile">
                     My Profile
@@ -295,96 +312,97 @@ class Stream extends React.Component {
                 </MenuList>
               </Menu>
             </div>
-            <div className="queue-button">
-              {this.state.inQueue ? leaveQueue : joinQueue}>
+          </header>
+          <section className="stream">
+            <video id="myVideo" autoPlay name="media">
+              <source src={this.state.videoURL} type="video/mp4" />
+            </video>
+          </section>
+          <section className="stream-info">
+            <div className="streamer-username">
+              <p>Username: {streamerName}</p>
+              <p>Time remaining: {timeRemain} seconds</p>
             </div>
-            <section className="stream">
-              <video id="myVideo" autoPlay name="media">
-                <source src={this.state.videoURL} type="video/mp4" />
-              </video>
-            </section>
-            <section className="stream-info">
-              <div className="streamer-username">
-                <p>Username: {streamerName}</p>
-                <p>Time remaining: {timeRemain} seconds</p>
-              </div>
-              <div className="checkProfileButton">
-                <Popup trigger={<button className="button"> Check Profile </button>} modal>
-                  {close => (
-                      <div className="modal">
-                        <a className="close" onClick={close}>
-                          &times;
-                        </a>
-                        <div className="header"> Username: {streamerName}</div>
-                        <div className="content">
-                          {" "}
-                          First Name: {streamerFirstName}
-                          <br />
-                          Last Name: {streamerLastName}
-                          <br />
-                          Email: {streamerEmail}
-                          <br />
-                          Instagram: {streamerInstagram}
-                          <br />
-                          Youtube: {streamerYoutube}
-                          <br />
-                          Facebook: {streamerFacebook}
-                          <br />
-                          Other: {streamerOther}
-                          <br />
-                        </div>
-                        <div className="closeProfile">
-                          <button
-                              className="button"
-                              onClick={() => {
-                                close();
-                              }}
-                          >
-                            Close Profile
-                          </button>
-                        </div>
-                      </div>
-                  )}
-                </Popup>
-              </div>
-              <div className="voteUpButton">
-                <button
-                    disabled={this.state.voted}
-                    onClick={this.onVoteUp.bind(this)}
-                >
-                  +5 Seconds
-                </button>
-              </div>
-              <div className="voteDownButton">
-                <button
-                    disabled={this.state.voted}
-                    onClick={this.onVoteDown.bind(this)}
-                >
-                  -2 Seconds
-                </button>
-              </div>
-            </section>
-            <section className="chat">
-              <div ref={this.messagesRef} className="messages">
-                {messages.map(({ username, comment, key }) => (
-                    <p key={key}>
-                      <span className="bold">{username}</span>: {comment}
-                    </p>
-                ))}
-              </div>
-              <div className="input-box">
-                <input
-                    type="text"
-                    // name="username"
-                    value={chatMessage}
-                    onChange={this.onChatMessageChange}
-                    onKeyDown={this.handleKeyDown}
-                />
-                <button onClick={this.onSend}>Send</button>
-              </div>
-            </section>
-          </div>
+            <div className="checkProfileButton">
+              <Popup
+                trigger={<button className="button"> Check Profile </button>}
+                modal
+              >
+                {close => (
+                  <div className="modal">
+                    <a className="close" onClick={close}>
+                      &times;
+                    </a>
+                    <div className="header"> Username: {streamerName}</div>
+                    <div className="content">
+                      {' '}
+                      First Name: {streamerFirstName}
+                      <br />
+                      Last Name: {streamerLastName}
+                      <br />
+                      Email: {streamerEmail}
+                      <br />
+                      Instagram: {streamerInstagram}
+                      <br />
+                      Youtube: {streamerYoutube}
+                      <br />
+                      Facebook: {streamerFacebook}
+                      <br />
+                      Other: {streamerOther}
+                      <br />
+                    </div>
+                    <div className="closeProfile">
+                      <button
+                        className="button"
+                        onClick={() => {
+                          close();
+                        }}
+                      >
+                        Close Profile
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </Popup>
+            </div>
+            <div className="voteUpButton">
+              <button
+                disabled={this.state.voted}
+                onClick={this.onVoteUp.bind(this)}
+              >
+                +5 Seconds
+              </button>
+            </div>
+            <div className="voteDownButton">
+              <button
+                disabled={this.state.voted}
+                onClick={this.onVoteDown.bind(this)}
+              >
+                -2 Seconds
+              </button>
+            </div>
+          </section>
+          <section className="chat">
+            <div ref={this.messagesRef} className="messages">
+              {messages.map(({ username, comment, key }) => (
+                <p key={key}>
+                  <span className="bold">{username}</span>: {comment}
+                </p>
+              ))}
+            </div>
+            <div className="input-box">
+              <input
+                type="text"
+                // name="username"
+                value={chatMessage}
+                onChange={this.onChatMessageChange}
+                onKeyDown={this.handleKeyDown}
+              />
+              <button onClick={this.onSend}>Send</button>
+            </div>
+          </section>
         </div>
+      </div>
     );
   }
 }

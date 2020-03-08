@@ -39,24 +39,12 @@
       padding: 5px 5px;
       cursor: pointer;
       font-size: 13px;
-    }
-
-    .queue-button {
-      position: absolute;
-      right: 90px;
-      top: 10px;
-      transition: all 0.3s ease-out;
-      background-color: rgba(255, 0, 0, 0.5);
-      display: inline-block;
-      border: 2px solid black;
-      border-radius: 7px;
-      padding: 5px 5px;
-      font-size: 13px;
 
       input {
         display: none;
       }
     }
+
 
     a:link,
     a:visited {
