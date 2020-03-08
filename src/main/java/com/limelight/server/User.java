@@ -18,7 +18,6 @@ public class User {
 
     private String email;
 
-    // TODO: once frontend sends password via encrypted authorization header, store its hash instead of the password itself
     private String password;
 
     EnumMap<SocialMediaHandle, String> socialMediaHandles = new EnumMap<SocialMediaHandle, String>(SocialMediaHandle.class);
