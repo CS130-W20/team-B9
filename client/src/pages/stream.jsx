@@ -77,7 +77,6 @@ class Stream extends React.Component {
       ],
       chatMessage: ''
     }));
-    //console.log(this.state.chatMessage);
     const form = new FormData();
     form.append('userName', this.state.userName);
     form.append('comment', this.state.chatMessage);
@@ -103,7 +102,6 @@ class Stream extends React.Component {
 
     const userNameQuery = encodeURIComponent(this.state.userName);
     const keyQuery = encodeURIComponent(this.state.key);
-    console.log(userNameQuery);
     fetch(
       `http://localhost:8080/stream/upload?userName=${userNameQuery}&key=${keyQuery}`,
       {
@@ -128,10 +126,17 @@ class Stream extends React.Component {
     });
   };
 
-  onCheckProfile = e => {
-    console.log("called");
-    
-}
+  setDummy() {
+    this.setState({streamerName: 'Dummy Streamer'});
+    this.setState({streamerFirstName: 'DSFirstName'});
+    this.setState({streamerLastName: 'DSLastName'});
+    this.setState({streamerEmail: 'DSEmail@gmail.com'});
+    this.setState({streamerOther:  'This is a dummy streamer'});
+    this.setState({streamerInstagram: 'DSInsta'});
+    this.setState({streamerYoutube: 'DSYoutube'});
+    this.setState({streamerFacebook: 'DSFacebook'});
+    // this.setState({twitter: response.socialMediaHandles['TWITTER']});
+  }
 
   componentDidUpdate() {
     let container = this.messagesRef.current;
@@ -144,7 +149,7 @@ class Stream extends React.Component {
     // scroll to bottom if isScrolledToBottom
     if (isScrolledToBottom) container.scrollTop = container.scrollHeight;
   }
-
+  // fetch the current streamer information and update upon change every second
   componentDidMount() {
     setInterval(() => {
       fetch(`http://localhost:8080/stream/get`, {
@@ -170,21 +175,15 @@ class Stream extends React.Component {
         return response.text();
       })
       .catch(err => {        
-        const DummyStreamer = 'Dummy Streamer'
-        this.setState({streamerName: DummyStreamer});
-          this.setState({streamerFirstName: 'DSFirstName'});
-          this.setState({streamerLastName: 'DSLastName'});
-          this.setState({streamerEmail: 'DSEmail@gmail.com'});
-          this.setState({streamerOther:  'This is a dummy streamer'});
-          this.setState({streamerInstagram: 'DSInsta'});
-          this.setState({streamerYoutube: 'DSYoutube'});
-          this.setState({streamerFacebook: 'DSFacebook'});
-          // this.setState({twitter: response.socialMediaHandles['TWITTER']});
+        // response does not return properly formatted username for the dummy video
+        // set all properties based on dummy
+        this.setDummy();
+        
       })
       .then((response) => {
         if (typeof response !== 'undefined') {
-          console.log(response);
-          //console.log(this.state.streamerName);
+          // if the streamer is not dummy streamer, and the streamer is different from previous streamer
+          // fetch the new streamer information and update the states
           if (this.state.streamerName !== response && response !== '' && response !== 'Dummy Streamer') {
             this.setState({streamerName: response});
             const userNameQuery = encodeURIComponent(this.state.streamerName);
@@ -199,7 +198,6 @@ class Stream extends React.Component {
             })
            .then((response) => {
             if (typeof response !== 'undefined') {
-              console.log(response);
               this.setState({streamerFirstName: response.firstName});
               this.setState({streamerLastName: response.lastName});
               this.setState({streamerEmail: response.email});
@@ -221,16 +219,11 @@ class Stream extends React.Component {
             }
           });
         }
+        // else two cases: on startup, response is Dummy Streamer
+        // or Dummy streamer kept playing after queue becomes empty
+        // either way, set the dummy profile variables
         else if (this.state.streamerName === 'Dummy Streamer' || (response === 'Dummy Streamer')){
-          this.setState({streamerName: 'Dummy Streamer'});
-          this.setState({streamerFirstName: 'DSFirstName'});
-          this.setState({streamerLastName: 'DSLastName'});
-          this.setState({streamerEmail: 'DSEmail@gmail.com'});
-          this.setState({streamerOther:  'This is a dummy streamer'});
-          this.setState({streamerInstagram: 'DSInsta'});
-          this.setState({streamerYoutube: 'DSYoutube'});
-          this.setState({streamerFacebook: 'DSFacebook'});
-          // this.setState({twitter: response.socialMediaHandles['TWITTER']});
+          this.setDummy();
         }
       } 
       });
@@ -306,11 +299,7 @@ class Stream extends React.Component {
               <p>Time remaining: {timeRemain} seconds</p>
             </div>
             <div className="checkProfileButton">
-              {/* <Popup trigger={<button
-                onClick={this.onCheckProfile.bind(this)}> Check Profile</button>} position="right center">
-                <span> Modal content </span>
-              </Popup> */}
-              <Popup trigger={<button className="button" onClick={this.onCheckProfile.bind(this)}> Check Profile </button>} modal>
+              <Popup trigger={<button className="button"> Check Profile </button>} modal>
                 {close => (
                   <div className="modal">
                   <a className="close" onClick={close}>

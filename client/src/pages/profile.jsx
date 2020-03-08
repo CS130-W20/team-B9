@@ -70,16 +70,6 @@ class UserProfile extends React.Component {
         this.setState({otherChanged: true});
     };
 
-    handleImage = e => {   
-        console.log(e.target.files[0]);
-
-        this.setState({
-            selectedFile: e.target.files[0],
-            loaded: 0,
-        })
-
-    };
-
     handleSubmit = e => {
         e.preventDefault();
         
@@ -255,7 +245,7 @@ componentWillMount(){
                 </div> */}
                 <div className="username">
                     <p>{userName}</p>
-                    <p>{key}</p>
+                    {/* <p>{key}</p> */}
                 </div>
             </section>
             <section className="body">

@@ -51,7 +51,6 @@ public class StreamTimer {
     if (secondsLeftOfLivestream <= 0 && secondsPastDuringLivestream < minimumLivestreamSeconds) {
       secondsLeftOfLivestream = minimumLivestreamSeconds - secondsPastDuringLivestream;
     } else if (secondsLeftOfLivestream <= 0) {
-      System.out.println("STREAMER REMOVED");
       queue.pollStreamer();
       timer.cancel();
       timer.purge();

@@ -73,8 +73,6 @@ public class MainController {
         }
 
         if (user.get().checkPassword(password)) {
-            System.out.println("login success" );
-            System.out.println(userName);
             return userName.hashCode();
         }
 

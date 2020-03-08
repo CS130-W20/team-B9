@@ -78,6 +78,5 @@ public class User {
 
     public void setSocialMediaHandle(SocialMediaHandle socialMediaHandle, String userName) {
         socialMediaHandles.put(socialMediaHandle, userName);
-        System.out.println(socialMediaHandle);
     }
 }

@@ -70,21 +70,16 @@ public class StreamController {
     String url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/ucla.mp4";
 
     if (queueStreamer == null) {
-      System.out.println(1);
       currentStreamer = null;
       if (currentStream != null) {
         currentStream.clearComments();
         currentStream = null;
       }
     } else if (!queueStreamer.equals(currentStreamer)) {
-      System.out.println(2);
       currentStreamer = queueStreamer;
       currentStream = new Livestream(currentStreamer);
-      System.out.println("New live stream created: ");
-      System.out.println("Time remaining: " + currentStream.getTimer().getSecondsLeftOfLivestream());
       url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     } else {
-      System.out.println(3);
       url = "https://limelight-stream-bucket.s3.us-west-1.amazonaws.com/" + currentStreamer + ".mp4";
     }
 
