@@ -42,9 +42,9 @@ public class MainController {
 
         User newUser = new User();
         newUser.setUserName(userName);
-        newUser.setFirstName('');
-        newUser.setLastName('');
-        newUser.setEmail('');
+        newUser.setFirstName("");
+        newUser.setLastName("");
+        newUser.setEmail("");
         newUser.setPassword(password);
         userRepository.save(newUser);
         
