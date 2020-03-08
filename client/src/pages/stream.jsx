@@ -204,17 +204,27 @@ class Stream extends React.Component {
               this.setState({streamerOther: response.otherInfo});
               if (Object.keys(response.socialMediaHandles).length !== 0 ){
                   if (response.socialMediaHandles['INSTAGRAM'] !== null) {
-                      this.setState({streamerInstagram: response.socialMediaHandles['INSTAGRAM']});
+                    this.setState({streamerInstagram: response.socialMediaHandles['INSTAGRAM']});
+                  } else {
+                    this.setState({streamerInstagram: ''});
                   }
                   if (response.socialMediaHandles['YOUTUBE'] !== null) {
-                      this.setState({streamerYoutube: response.socialMediaHandles['YOUTUBE']});
+                    this.setState({streamerYoutube: response.socialMediaHandles['YOUTUBE']});
+                  } else {
+                    this.setState({streamerYoutube: ''});
                   }
                   if (response.socialMediaHandles['FACEBOOK'] !== null) {
                       this.setState({streamerFacebook: response.socialMediaHandles['FACEBOOK']});
+                  } else {
+                    this.setState({streamerFacebook: ''});
                   }
                   // if (response.socialMediaHandles['TWITTER'] !== null) {
                   //     this.setState({streamerTwitter: response.socialMediaHandles['TWITTER']});
                   // }
+              } else {
+                this.setState({streamerInstagram: ''});
+                this.setState({streamerYoutube: ''});
+                this.setState({streamerFacebook: ''});
               }
             }
           });
