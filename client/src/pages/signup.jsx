@@ -12,7 +12,6 @@ class Signup extends React.Component {
       firstName: 'aaa',
       lastName:'bbb',
       email:'placeholder@gmail.com',
-      key: ''
     };
   }
 
@@ -44,7 +43,8 @@ class Signup extends React.Component {
       return response.json();
     })
     .then(function(response) {
-      this.setState({ key: response });
+      localStorage.setItem('userSessionKey', response);
+      console.log(localStorage.getItem('userSessionKey'));
     });
   } catch (e) {
     alert(e.message);

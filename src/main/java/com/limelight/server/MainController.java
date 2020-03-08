@@ -48,8 +48,8 @@ public class MainController {
         newUser.setPassword(password);
         userRepository.save(newUser);
         
-        //System.out.println("user created" );
-        //System.out.println(userName);
+        System.out.println("user created" );
+        System.out.println(userName);
         return userName.hashCode();
     }
 
@@ -72,11 +72,10 @@ public class MainController {
         }
 
         if (user.get().checkPassword(password)) {
+            System.out.println("login success" );
+            System.out.println(userName);
             return userName.hashCode();
         }
-
-        //System.out.println("login success" );
-        //System.out.println(userName);
 
         return null;
     }
