@@ -49,7 +49,7 @@ public class StreamTimer {
     	if(secondsLeftOfLivestream <= 0 && secondsPastDuringLivestream < minimumLivestreamSeconds) {
     		secondsLeftOfLivestream = minimumLivestreamSeconds - secondsPastDuringLivestream;
     	}
-    	else if(secondsLeftOfLivestream <= 0 || secondsPastDuringLivestream >= maximumLivestreamSeconds) {
+    	else if(secondsLeftOfLivestream == 0) {
     	    queue.pollStreamer();
     		hasTimeLeft = false;
     	}

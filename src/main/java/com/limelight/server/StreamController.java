@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
-@RestController
+@Controller
+@RequestMapping(path = "/stream", method = RequestMethod.GET)
 public class StreamController {
     private static final long CHUNK_SIZE = 1000000L;
 
@@ -34,23 +36,39 @@ public class StreamController {
      * @return ResponseEntity<ResourceRegion> representing the requested portion of the video stream
      * @throws Exception if malformed URL is accessed
      */
-    @GetMapping("/stream/get")
+    @GetMapping("/get")
     public ResponseEntity<ResourceRegion> getCurrentStream(@RequestHeader HttpHeaders headers) throws Exception {
         String queueStreamer = queue.getCurrentStreamer();
+        ResourceRegion region;
 
-        if (!queueStreamer.equals(currentStreamer)) {
+        ResponseEntity.BodyBuilder builder = ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)    // return HTTP code 206 to indicate partial video
+                .cacheControl(CacheControl.noStore().mustRevalidate());
+
+        if (queueStreamer == null) {
+            currentStreamer = null;
+            urlResource = amazonS3ClientService.getResourceFromS3Bucket("ucla.mp4");
+            region = resourceRegion(urlResource, headers);
+        } else if (!queueStreamer.equals(currentStreamer)) {
             currentStreamer = queueStreamer;
             currentStream = new Livestream(currentStreamer);
+            return null;
+        } else {
+            region = resourceRegion(urlResource, headers);
         }
+        builder.contentType(MediaTypeFactory.getMediaType(urlResource).orElse(MediaType.APPLICATION_OCTET_STREAM));
 
-        UrlResource stream = amazonS3ClientService.getResourceFromS3Bucket(getStreamFromUser(currentStreamer));
-        ResourceRegion region = resourceRegion(stream, headers);
-        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)    // return HTTP code 206 to indicate partial video
-                .contentType(MediaTypeFactory.getMediaType(stream).orElse(MediaType.APPLICATION_OCTET_STREAM))
-                .body(region);
+        return builder.body(region);
     }
 
-    @PostMapping("/stream/upload")
+    /**
+     * Uploads a user's stream video to the S3 database and adds them to the {@link StreamQueue}.
+     *
+     * @param file     video stream to be uploaded
+     * @param userName of streamer
+     * @param key      session key
+     * @return redirect user to post-upload page
+     */
+    @PostMapping("/upload")
     public RedirectView uploadStream(@RequestPart(value = "file") MultipartFile file,
                                      @RequestParam String userName,
                                      @RequestParam Integer key) {
@@ -58,8 +76,7 @@ public class StreamController {
         amazonS3ClientService.uploadFileToS3Bucket(file, true);
         joinStreamQueue(userName, key);
 
-        // TODO: redirect to waiting page
-        return new RedirectView("/stream/get");
+        return new RedirectView("/");
     }
 
     /**
@@ -92,34 +109,61 @@ public class StreamController {
         return queue.removeStreamer(userName);
     }
 
-    @PostMapping("/stream/upvote")
+    /**
+     * Upvotes the current stream.
+     */
+    @PostMapping("/upvote")
     public void upvoteStream() {
         currentStream.upvote();
         System.out.println("voted up" );
     }
 
-    @PostMapping("/stream/downvote")
+    /**
+     * Downvotes the current stream.
+     */
+    @PostMapping("/downvote")
     public void downvoteStream() {
         currentStream.downvote();
         System.out.println("voted down" );
     }
 
-    @GetMapping("/stream/getVoteCount")
+    /**
+     * Gets the vote count for the current stream.
+     *
+     * @return vote count
+     */
+    @GetMapping("/getVoteCount")
     public int getVoteCount() {
         return currentStream.getVoteCount();
     }
 
-    @GetMapping("/stream/getRemainingTime")
+    /**
+     * Gets the time remaining for the current stream.
+     *
+     * @return time remaining
+     */
+    @GetMapping("/getRemainingTime")
     public long getRemainingTime() {
         return currentStream.getTimer().getSecondsLeftOfLivestream();
     }
 
-    @PostMapping("/stream/addComment")
+    /**
+     * Adds a comment to the current stream.
+     *
+     * @param userName of commenter
+     * @param comment  content of comment
+     */
+    @PostMapping("/addComment")
     public void addComment(@RequestParam String userName, @RequestParam String comment) {
         currentStream.addComment(userName, comment);
     }
 
-    @GetMapping("/stream/getComments")
+    /**
+     * Gets list of comments on current stream.
+     *
+     * @return list of comments
+     */
+    @GetMapping("/getComments")
     public List<LivestreamComment> getComments() {
         return currentStream.getComments();
     }
@@ -151,7 +195,7 @@ public class StreamController {
         long contentLength = stream.contentLength();
 
         // if header does not contain "Range" field, serve the entire video
-        if (headers.getRange().isEmpty()) {
+        if (headers == null || headers.getRange().isEmpty()) {
             long rangeLength = Math.min(CHUNK_SIZE, contentLength);
             return new ResourceRegion(stream, 0, rangeLength);
         } else {
