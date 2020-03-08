@@ -80,7 +80,7 @@ class UserProfile extends React.Component {
             form.append('attribute', 'FIRST_NAME');
             form.append('value', this.state.firstName);
         
-            fetch('http://localhost:8080/app/edit', {
+            fetch('http://limelight-ucla.herokuapp.com/app/edit', {
                 method: 'POST',
                 mode: 'no-cors',
                 body: form
@@ -94,7 +94,7 @@ class UserProfile extends React.Component {
             form.append('attribute', 'LAST_NAME');
             form.append('value', this.state.lastName);
         
-            fetch('http://localhost:8080/app/edit', {
+            fetch('http://limelight-ucla.herokuapp.com/app/edit', {
                 method: 'POST',
                 mode: 'no-cors',
                 body: form
@@ -108,7 +108,7 @@ class UserProfile extends React.Component {
             form.append('attribute', 'EMAIL');
             form.append('value', this.state.email);
         
-            fetch('http://localhost:8080/app/edit', {
+            fetch('http://limelight-ucla.herokuapp.com/app/edit', {
                 method: 'POST',
                 mode: 'no-cors',
                 body: form
@@ -123,7 +123,7 @@ class UserProfile extends React.Component {
             form.append('platform', 'INSTAGRAM');
             form.append('value', this.state.instagram);
         
-            fetch('http://localhost:8080/app/edit', {
+            fetch('http://limelight-ucla.herokuapp.com/app/edit', {
                 method: 'POST',
                 mode: 'no-cors',
                 body: form
@@ -138,7 +138,7 @@ class UserProfile extends React.Component {
             form.append('platform', 'YOUTUBE');
             form.append('value', this.state.youtube);
         
-            fetch('http://localhost:8080/app/edit', {
+            fetch('http://limelight-ucla.herokuapp.com/app/edit', {
                 method: 'POST',
                 mode: 'no-cors',
                 body: form
@@ -153,7 +153,7 @@ class UserProfile extends React.Component {
             form.append('platform', 'FACEBOOK');
             form.append('value', this.state.facebook);
         
-            fetch('http://localhost:8080/app/edit', {
+            fetch('http://limelight-ucla.herokuapp.com/app/edit', {
                 method: 'POST',
                 mode: 'no-cors',
                 body: form
@@ -168,7 +168,7 @@ class UserProfile extends React.Component {
         //     form.append('platform', 'SNAPCHAT');
         //     form.append('value', this.state.twitter);
         
-        //     fetch('http://localhost:8080/app/edit', {
+        //     fetch('http://limelight-ucla.herokuapp.com/app/edit', {
         //         method: 'POST',
         //         headers: {
         //             'Access-Control-Allow-Origin':'*'
@@ -184,7 +184,7 @@ class UserProfile extends React.Component {
             form.append('attribute', 'OTHER_INFO');
             form.append('value', this.state.other);
         
-            fetch('http://localhost:8080/app/edit', {
+            fetch('http://limelight-ucla.herokuapp.com/app/edit', {
                 method: 'POST',
                 mode: 'no-cors',
                 body: form
@@ -194,7 +194,7 @@ class UserProfile extends React.Component {
 
 componentWillMount(){
     const userNameQuery = encodeURIComponent(this.state.userName);
-    fetch(`http://localhost:8080/app/getUser?userName=${userNameQuery}`, {
+    fetch(`http://limelight-ucla.herokuapp.com/app/getUser?userName=${userNameQuery}`, {
         method: 'GET',
         headers: {
             'Access-Control-Allow-Origin':'*',

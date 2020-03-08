@@ -47,7 +47,7 @@ class Stream extends React.Component {
   onVoteUp = e => {
     if (this.state.voted === false) {
       //this.setState({ voted: true });
-      fetch('http://localhost:8080/stream/upvote', {
+      fetch('http://limelight-ucla.herokuapp.com/stream/upvote', {
         method: 'POST',
         mode: 'no-cors'
       });
@@ -57,7 +57,7 @@ class Stream extends React.Component {
   onVoteDown = e => {
     if (this.state.voted === false) {
       //this.setState({ voted: true });
-      fetch('http://localhost:8080/stream/downvote', {
+      fetch('http://limelight-ucla.herokuapp.com/stream/downvote', {
         method: 'POST',
         mode: 'no-cors'
       });
@@ -80,7 +80,7 @@ class Stream extends React.Component {
     const form = new FormData();
     form.append('userName', this.state.userName);
     form.append('comment', this.state.chatMessage);
-    fetch('http://localhost:8080/stream/addComment', {
+    fetch('http://limelight-ucla.herokuapp.com/stream/addComment', {
       method: 'POST',
       mode: 'no-cors',
       body: form
@@ -103,7 +103,7 @@ class Stream extends React.Component {
     const userNameQuery = encodeURIComponent(this.state.userName);
     const keyQuery = encodeURIComponent(this.state.key);
     fetch(
-      `http://localhost:8080/stream/upload?userName=${userNameQuery}&key=${keyQuery}`,
+      `http://limelight-ucla.herokuapp.com/stream/upload?userName=${userNameQuery}&key=${keyQuery}`,
       {
         method: 'POST',
         mode: 'no-cors',
@@ -119,7 +119,7 @@ class Stream extends React.Component {
     form.append('userName', this.state.userName);
     form.append('key', this.state.key);
 
-    fetch(`http://localhost:8080/stream/leaveStreamQueue`, {
+    fetch(`http://limelight-ucla.herokuapp.com/stream/leaveStreamQueue`, {
       method: 'POST',
       mode: 'no-cors',
       body: form
@@ -152,7 +152,7 @@ class Stream extends React.Component {
   // fetch the current streamer information and update upon change every second
   componentDidMount() {
     setInterval(() => {
-      fetch(`http://localhost:8080/stream/get`, {
+      fetch(`http://limelight-ucla.herokuapp.com/stream/get`, {
         method: 'GET'
       })
         .then(response => response.text())
@@ -163,7 +163,7 @@ class Stream extends React.Component {
           }
         });
 
-      fetch(`http://localhost:8080/stream/getCurrentStreamer`, {
+      fetch(`http://limelight-ucla.herokuapp.com/stream/getCurrentStreamer`, {
         method: 'GET',
         headers: {
           'Access-Control-Allow-Origin': '*',
@@ -187,7 +187,7 @@ class Stream extends React.Component {
           if (this.state.streamerName !== response && response !== '' && response !== 'Dummy Streamer') {
             this.setState({streamerName: response});
             const userNameQuery = encodeURIComponent(this.state.streamerName);
-            fetch(`http://localhost:8080/app/getUser?userName=${userNameQuery}`, {
+            fetch(`http://limelight-ucla.herokuapp.com/app/getUser?userName=${userNameQuery}`, {
                 method: 'GET',
                 headers: {
                     'Access-Control-Allow-Origin':'*',
@@ -228,7 +228,7 @@ class Stream extends React.Component {
       } 
       });
 
-      fetch(`http://localhost:8080/stream/getRemainingTime`, {
+      fetch(`http://limelight-ucla.herokuapp.com/stream/getRemainingTime`, {
         method: 'GET',
         headers: {
           'Access-Control-Allow-Origin': '*'
@@ -249,7 +249,7 @@ class Stream extends React.Component {
 
     //get comments
     setInterval(() => {
-      fetch(`http://localhost:8080/stream/getComments`, {
+      fetch(`http://limelight-ucla.herokuapp.com/stream/getComments`, {
         method: 'GET'
       })
         .then(res => res.json())
