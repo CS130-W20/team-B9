@@ -18,13 +18,9 @@ class Stream extends React.Component {
       },
       chatMessage: '',
       voted: false,
-<<<<<<< HEAD
-      inqueue: false,
-=======
       inQueue: false,
       userName: '',
       key: 0,
->>>>>>> master
       messages: [
         {
           username: 'KingJ0ffrey',
