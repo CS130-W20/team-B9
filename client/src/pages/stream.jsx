@@ -30,7 +30,8 @@ class Stream extends React.Component {
       // streamertwitter: '',
       timeRemain: '',
       messages: [],
-      videoURL: ''
+      baseVideoURL: '',
+      videoURLWithRandomParam: ''
     };
   }
 
@@ -158,8 +159,12 @@ class Stream extends React.Component {
       })
         .then(response => response.text())
         .then(url => {
-          if (this.state.videoURL !== url) {
-            this.setState({ videoURL: url, voted: false });
+          if (this.state.baseVideoURL !== url) {
+            this.setState({
+              baseVideoURL: url,
+              videoURLWithRandomParam: url + `?${Math.random()}`,
+              voted: false
+            });
             const video = document.getElementById('myVideo');
             if (video !== null) video.load();
           }
@@ -341,7 +346,7 @@ class Stream extends React.Component {
           </header>
           <section className="stream">
             <video id="myVideo" autoPlay loop name="media">
-              <source src={this.state.videoURL} type="video/mp4" />
+              <source src={this.state.videoURLWithRandomParam} type="video/mp4" />
             </video>
           </section>
           <section className="stream-info">
