@@ -129,7 +129,7 @@ class Stream extends React.Component {
   };
 
   setDummy() {
-    this.setState({ streamerName: 'No Streamers Available' });
+    this.setState({ streamerName: 'No One is Streaming' });
     this.setState({ streamerFirstName: '-' });
     this.setState({ streamerLastName: '-' });
     this.setState({ streamerEmail: '-' });
