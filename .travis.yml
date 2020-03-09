@@ -3,8 +3,3 @@ before_install:
 - chmod +x gradlew
 install:
 - "./gradlew clean build"
-deploy:
-  provider: heroku
-  api_key:
-    secure: 3a935777-9764-4299-b57e-4e303aa5058a
-    app: limelight-ucla
