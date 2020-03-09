@@ -16,12 +16,12 @@
       outline: 1px solid grey;
       font-weight: bolder;
       font-size: 27px;
-      padding: 10px 5px;
+      padding: 12px 5px;
 
       .profile-button-container {
         position: absolute;
         right: 10px;
-        top: 6px;
+        top: 8px;
         transition: all 0.3s ease-out;
         background-color: white;
         display: inline-block;
@@ -34,7 +34,7 @@
           outline: none;
           border: none;
           border-radius: 5px;
-          height: 35px;
+          height: 33px;
           font-size: 1rem;
           font-weight: bold;
           cursor: pointer;
@@ -74,8 +74,6 @@
       height: 38px;
     }
 
-
-
     a:link,
     a:visited {
       color: black;
@@ -89,7 +87,7 @@
     .stream {
       height: 100vw;
       max-height: 40vh;
-      outline: 1px solid grey;
+      outline: 1px solid #cacaca;
 
       video {
         width: 100%;
@@ -101,7 +99,7 @@
 
     .stream-info {
       height: 20vh;
-      outline: 1px solid grey;
+      outline: none;
       background-color: #ECECEC;
 
       .streamer-username {
@@ -201,7 +199,7 @@
     .chat {
       height: 100%;
       overflow: hidden;
-      outline: 1px solid grey;
+      outline: 1px solid #cacaca;
 
       .messages {
         height: 85%;
@@ -219,7 +217,7 @@
       }
 
       .input-box {
-        outline: 1px solid grey;
+        outline: 1px solid #cacaca;
         height: 15%;
         padding-top: 5px;
         padding-left: 10px;
@@ -227,8 +225,11 @@
 
       input {
         width: calc(100% - 85px);
+        margin-top: 4px;
         margin-right: 5px;
         outline: none;
+        border: none;
+        font-size: 1.1rem;
       }
 
       button {
