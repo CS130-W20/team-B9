@@ -1,8 +1,8 @@
 language: java
-
-before_install: 
-  - chmod +x gradlew
-
+before_install:
+- chmod +x gradlew
 install:
-  - ./gradlew clean build
-  
+- "./gradlew clean build"
+deploy:
+  api_key:
+    secure: Pr+eIRydVCBgpx+QT9QQzwmQQPMXYbv2oQ+bY/2cBeh0VXp3Zd7zaBwTsEhtFcFMYloZ247GxHmc26+nM4q1bK6+iO11+HlJx60p7PwcJVH4ZScnTC3lVOiLoiqAcd+va55zxdz7pjTUXf5dRMeNLisYVdN6f3GODnribCdeEEu5Aaos+xIAkSOpz5tceZUbtz5pMpY+sXGib46vkMlDeFC/wpUPdzcbZ0MGzeB4eeQBPBVOHdkXYIvsjhHazQflotVVCW6z64F96yphThnFFRrohqvFDiscR6I7Fp05aqIkm5pHcwiBiHm8TQmdOhmcQpN6vuSgM9uRKgyYw1qzOHnZ9+D5kiHlZQ828euJ5UzuEaWcfduQoIRlNYOotDccVvetZTVKDNwj+fpOaHxtokhFoN9Tmq3hTaeg8HZbrIpGWuXLkUmoRJVmqSZqM4mxIu+VwNNl64+PS/1yarHPf3xtXHTIbEsyl1cWOhsxweI84VTiB/Z1+0LPTUjWt+37TN55sCgjAduIH3xmDxThvbA1pkM55LPPzW0/ZS5Aaoq8KiEH+I4uj4kgwDo47FGBiWUvYSUXKrIZ/G+jUe/LS1TVC4BW10HkgRbg6iq+XoZVvkEZ4VcFzkKol11UcFxaACjL2v/etRZvxCi48sd7BTAqUyGrmr2fapbzkVs39r4=
