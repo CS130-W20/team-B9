@@ -181,7 +181,7 @@ class Stream extends React.Component {
 
           })
           .then((response) => {
-            if (typeof response !== 'undefined') {
+            if (typeof response !== 'null') {
               // if the streamer is not dummy streamer, and the streamer is different from previous streamer
               // fetch the new streamer information and update the states
               if (this.state.streamerName !== response && response !== '' && response !== 'Dummy Streamer') {
@@ -197,7 +197,7 @@ class Stream extends React.Component {
                       return response.json();
                     })
                     .then((response) => {
-                      if (typeof response !== 'undefined') {
+                      if (typeof response !== 'null') {
                         this.setState({streamerFirstName: response.firstName});
                         this.setState({streamerLastName: response.lastName});
                         this.setState({streamerEmail: response.email});
