@@ -160,7 +160,8 @@ class Stream extends React.Component {
         .then(url => {
           if (this.state.videoURL !== url) {
             this.setState({ videoURL: url, voted: false });
-            document.getElementById('myVideo').load();
+            const video = document.getElementById('myVideo');
+            if (video !== null) video.load();
           }
           if (this.state.userName === url.split('/')[3].split('.')[0]) {
             this.setState({ inQueue: false });
