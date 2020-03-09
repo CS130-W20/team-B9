@@ -14,48 +14,64 @@
       width: 100%;
       height: 15vh;
       outline: 1px solid grey;
-      padding-left: 55px;
       font-weight: bolder;
-      font-size: 24px;
-      padding-top: 10px;
+      font-size: 27px;
+      padding: 12px 5px;
+
+      .profile-button-container {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        transition: all 0.3s ease-out;
+        background-color: white;
+        display: inline-block;
+        border-radius: 7px;
+        cursor: pointer;
+  
+        button {
+          color: white;
+          background-color: #009994;
+          outline: none;
+          border: none;
+          border-radius: 5px;
+          height: 33px;
+          font-size: 1rem;
+          font-weight: bold;
+          cursor: pointer;
+          text-decoration: none;
+
+          &.menu {
+            background-color: rgba(0,0,0,0);
+            color: grey;
+            font-size: 1.1rem;
+            padding: 8px 20px;
+          }
+
+          &.leave {
+            background-color: #CD0000;
+          }
+
+          &.queue {
+            width: 130px;
+            box-shadow: 2px 2px 4px 0px #888888;
+          }
+        }
+
+        input {
+          display: none;
+        }
+      }
+
+      p {
+        margin: 0 0 0 50px;
+      }
     }
 
     img {
       position: absolute;
-      top: 5px;
+      top: 8px;
       left: 10px;
-      height: 35px;
-    }
-
-    .profile-button-container {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      transition: all 0.3s ease-out;
-      background-color: white;
-      display: inline-block;
-      border: 2px solid black;
-      border-radius: 7px;
-      padding: 5px 5px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .queue-button {
-      position: absolute;
-      right: 90px;
-      top: 10px;
-      transition: all 0.3s ease-out;
-      background-color: rgba(255, 0, 0, 0.5);
-      display: inline-block;
-      border: 2px solid black;
-      border-radius: 7px;
-      padding: 5px 5px;
-      font-size: 13px;
-
-      input {
-        display: none;
-      }
+      height: 38px;
     }
 
     a:link,
@@ -71,7 +87,7 @@
     .stream {
       height: 100vw;
       max-height: 40vh;
-      outline: 1px solid grey;
+      outline: 1px solid #cacaca;
 
       video {
         width: 100%;
@@ -83,7 +99,7 @@
 
     .stream-info {
       height: 20vh;
-      outline: 1px solid grey;
+      outline: none;
       background-color: #ECECEC;
 
       .streamer-username {
@@ -183,7 +199,7 @@
     .chat {
       height: 100%;
       overflow: hidden;
-      outline: 1px solid grey;
+      outline: 1px solid #cacaca;
 
       .messages {
         height: 85%;
@@ -201,7 +217,7 @@
       }
 
       .input-box {
-        outline: 1px solid grey;
+        outline: 1px solid #cacaca;
         height: 15%;
         padding-top: 5px;
         padding-left: 10px;
@@ -209,13 +225,16 @@
 
       input {
         width: calc(100% - 85px);
+        margin-top: 4px;
         margin-right: 5px;
         outline: none;
+        border: none;
+        font-size: 1.1rem;
       }
 
       button {
         color: white;
-        background-color: #009994;
+        background-color: #747474;
         outline: none;
         border: 0.5px solid white;
         padding: 8px 20px;
