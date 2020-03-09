@@ -340,7 +340,7 @@ class Stream extends React.Component {
             </div>
           </header>
           <section className="stream">
-            <video id="myVideo" autoPlay name="media">
+            <video id="myVideo" autoPlay loop name="media">
               <source src={this.state.videoURL} type="video/mp4" />
             </video>
           </section>
