@@ -29,13 +29,10 @@ function Landing() {
           </h4>
 
           <ol>
-            <li>Join a line to be in the Limelight</li>
-            <li>Watch other people as you wait</li>
+            <li>Upload a video and wait in line to be in the Limelight</li>
+            <li>Watch other amazing people as you wait</li>
             <li>
-              When it's your turn, you have the stage <br />
-              <span>
-                Livestream yourself to millions of viewers and make your mark.
-              </span>
+              When it's your turn, the stage is all yours <br />
             </li>
           </ol>
           <p>

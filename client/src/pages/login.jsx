@@ -9,7 +9,7 @@ class Login extends React.Component {
     this.state = {
       userName: '',
       password: '',
-      errors: '',
+      errors: ''
     };
   }
 
@@ -21,37 +21,36 @@ class Login extends React.Component {
     this.setState({ password: e.target.value });
   };
 
-    handleSubmit = e => {
-      e.preventDefault();
-      const form  = new FormData();
-  
-      for(const name in this.state) {
-        if (name !== 'errors') {
-          form.append(name, this.state[name]);
-        }
-      }
+  handleSubmit = e => {
+    e.preventDefault();
+    const form = new FormData();
 
-      fetch('https://limelight-ucla.herokuapp.com/app/login', {
-        method: 'POST',
-        headers: {
-          'Access-Control-Allow-Origin':'*'
-        },
-        body: form
-      })
-      .then((response) => {
+    for (const name in this.state) {
+      if (name !== 'errors') {
+        form.append(name, this.state[name]);
+      }
+    }
+
+    fetch('https://limelight-ucla.herokuapp.com/app/login', {
+      method: 'POST',
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: form
+    })
+      .then(response => {
         return response.json();
       })
-      .then((response) => {
+      .then(response => {
         if (response === 0) {
           if (this.state.userName === '') {
-            this.setState({ errors: "Please enter username" });
+            this.setState({ errors: 'Please enter a username' });
           } else if (this.state.password === '') {
-            this.setState({ errors: "Please enter password" });
+            this.setState({ errors: 'Please enter a password' });
           } else {
-            this.setState({ errors: "Wrong username or password" });
+            this.setState({ errors: 'Invalid username or password' });
           }
-        }
-        else {
+        } else {
           localStorage.setItem('userSessionKey', response);
           localStorage.setItem('userName', this.state.userName);
           this.props.history.push('/stream');
@@ -69,7 +68,6 @@ class Login extends React.Component {
         </section>
         <section className="body">
           <form onSubmit={this.handleSubmit} id="form">
-            <p>{errors}</p>
             <div className="form-input">
               <label htmlFor="userName">Username</label>
               <input
@@ -93,6 +91,7 @@ class Login extends React.Component {
           <button type="submit" form="form">
             LOG IN
           </button>
+          <p>{errors}</p>
         </section>
       </div>
     );

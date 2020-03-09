@@ -5,6 +5,7 @@ import { Menu, MenuList, MenuButton, MenuLink } from '@reach/menu-button';
 import '@reach/menu-button/styles.css';
 import logo from '../assets/logo.png';
 import Popup from 'reactjs-popup';
+import clock from '../assets/clock.png';
 
 class Stream extends React.Component {
   constructor(props) {
@@ -47,7 +48,7 @@ class Stream extends React.Component {
   onVoteUp = e => {
     if (this.state.voted === false) {
       this.setState({ voted: true });
-      fetch('http://localhost:8080/stream/upvote', {
+      fetch('http://limelight-ucla.herokuapp.com/stream/upvote', {
         method: 'POST',
         mode: 'no-cors'
       });
@@ -103,12 +104,12 @@ class Stream extends React.Component {
     const userNameQuery = encodeURIComponent(this.state.userName);
     const keyQuery = encodeURIComponent(this.state.key);
     fetch(
-        `https://limelight-ucla.herokuapp.com/stream/upload?userName=${userNameQuery}&key=${keyQuery}`,
-        {
-          method: 'POST',
-          mode: 'no-cors',
-          body: form
-        }
+      `https://limelight-ucla.herokuapp.com/stream/upload?userName=${userNameQuery}&key=${keyQuery}`,
+      {
+        method: 'POST',
+        mode: 'no-cors',
+        body: form
+      }
     );
   };
 
@@ -127,14 +128,14 @@ class Stream extends React.Component {
   };
 
   setDummy() {
-    this.setState({ streamerName: 'Dummy Streamer' });
-    this.setState({ streamerFirstName: 'DSFirstName' });
-    this.setState({ streamerLastName: 'DSLastName' });
-    this.setState({ streamerEmail: 'DSEmail@gmail.com' });
-    this.setState({ streamerOther: 'This is a dummy streamer' });
-    this.setState({ streamerInstagram: 'DSInsta' });
-    this.setState({ streamerYoutube: 'DSYoutube' });
-    this.setState({ streamerFacebook: 'DSFacebook' });
+    this.setState({ streamerName: 'No Streamers Available' });
+    this.setState({ streamerFirstName: '-' });
+    this.setState({ streamerLastName: '-' });
+    this.setState({ streamerEmail: '-' });
+    this.setState({ streamerOther: '-' });
+    this.setState({ streamerInstagram: '-' });
+    this.setState({ streamerYoutube: '-' });
+    this.setState({ streamerFacebook: '-' });
     // this.setState({twitter: response.socialMediaHandles['TWITTER']});
   }
 
@@ -143,8 +144,8 @@ class Stream extends React.Component {
 
     // padding top + bottom  + 4px tolerance = 20 (magic number)
     let isScrolledToBottom =
-        container.scrollHeight - container.clientHeight <=
-        container.scrollTop + 20;
+      container.scrollHeight - container.clientHeight <=
+      container.scrollTop + 20;
 
     // scroll to bottom if isScrolledToBottom
     if (isScrolledToBottom) container.scrollTop = container.scrollHeight;
@@ -155,88 +156,109 @@ class Stream extends React.Component {
       fetch(`https://limelight-ucla.herokuapp.com/stream/get`, {
         method: 'GET'
       })
-          .then(response => response.text())
-          .then(url => {
-            if (this.state.videoURL !== url) {
-              this.setState({ videoURL: url });
-              document.getElementById('myVideo').load();
-            }
-          });
+        .then(response => response.text())
+        .then(url => {
+          if (this.state.videoURL !== url) {
+            this.setState({ videoURL: url, voted: false });
+            document.getElementById('myVideo').load();
+          }
+          if (this.state.userName === url.split('/')[3].split('.')[0]) {
+            this.setState({ inQueue: false });
+          }
+        });
 
       fetch(`https://limelight-ucla.herokuapp.com/stream/getCurrentStreamer`, {
         method: 'GET',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
+          Accept: 'application/json'
+        }
       })
-          .then((response) => {
-            return response.text();
-          })
-          .catch(err => {
-            // response does not return properly formatted username for the dummy video
-            // set all properties based on dummy
-            this.setDummy();
-
-          })
-          .then((response) => {
-            if (typeof response !== 'null') {
-              // if the streamer is not dummy streamer, and the streamer is different from previous streamer
-              // fetch the new streamer information and update the states
-              if (this.state.streamerName !== response && response !== '' && response !== 'Dummy Streamer') {
-                this.setState({streamerName: response});
-                const userNameQuery = encodeURIComponent(this.state.streamerName);
-                fetch(`https://limelight-ucla.herokuapp.com/app/getUser?userName=${userNameQuery}`, {
+        .then(response => {
+          return response.text();
+        })
+        .catch(err => {
+          // response does not return properly formatted username for the dummy video
+          // set all properties based on dummy
+          this.setDummy();
+        })
+        .then(response => {
+          if (response !== null) {
+            // if the streamer is not dummy streamer, and the streamer is different from previous streamer
+            // fetch the new streamer information and update the states
+            if (
+              this.state.streamerName !== response &&
+              response !== '' &&
+              response !== 'Dummy Streamer'
+            ) {
+              this.setState({ streamerName: response });
+              const userNameQuery = encodeURIComponent(this.state.streamerName);
+              fetch(
+                `https://limelight-ucla.herokuapp.com/app/getUser?userName=${userNameQuery}`,
+                {
                   method: 'GET',
                   headers: {
-                    'Access-Control-Allow-Origin':'*',
-                  },
+                    'Access-Control-Allow-Origin': '*'
+                  }
+                }
+              )
+                .then(response => {
+                  return response.json();
                 })
-                    .then((response) => {
-                      return response.json();
-                    })
-                    .then((response) => {
-                      if (typeof response !== 'null') {
-                        this.setState({streamerFirstName: response.firstName});
-                        this.setState({streamerLastName: response.lastName});
-                        this.setState({streamerEmail: response.email});
-                        this.setState({streamerOther: response.otherInfo});
-                        if (Object.keys(response.socialMediaHandles).length !== 0 ){
-                          if (response.socialMediaHandles['INSTAGRAM'] !== null) {
-                            this.setState({streamerInstagram: response.socialMediaHandles['INSTAGRAM']});
-                          } else {
-                            this.setState({streamerInstagram: ''});
-                          }
-                          if (response.socialMediaHandles['YOUTUBE'] !== null) {
-                            this.setState({streamerYoutube: response.socialMediaHandles['YOUTUBE']});
-                          } else {
-                            this.setState({streamerYoutube: ''});
-                          }
-                          if (response.socialMediaHandles['FACEBOOK'] !== null) {
-                            this.setState({streamerFacebook: response.socialMediaHandles['FACEBOOK']});
-                          } else {
-                            this.setState({streamerFacebook: ''});
-                          }
-                          // if (response.socialMediaHandles['TWITTER'] !== null) {
-                          //     this.setState({streamerTwitter: response.socialMediaHandles['TWITTER']});
-                          // }
-                        } else {
-                          this.setState({streamerInstagram: ''});
-                          this.setState({streamerYoutube: ''});
-                          this.setState({streamerFacebook: ''});
-                        }
+                .then(response => {
+                  if (response !== null) {
+                    this.setState({ streamerFirstName: response.firstName });
+                    this.setState({ streamerLastName: response.lastName });
+                    this.setState({ streamerEmail: response.email });
+                    this.setState({ streamerOther: response.otherInfo });
+                    if (Object.keys(response.socialMediaHandles).length !== 0) {
+                      if (response.socialMediaHandles['INSTAGRAM'] !== null) {
+                        this.setState({
+                          streamerInstagram:
+                            response.socialMediaHandles['INSTAGRAM']
+                        });
+                      } else {
+                        this.setState({ streamerInstagram: '' });
                       }
-                    });
-              }
-                  // else two cases: on startup, response is Dummy Streamer
-                  // or Dummy streamer kept playing after queue becomes empty
-              // either way, set the dummy profile variables
-              else if (this.state.streamerName === 'Dummy Streamer' || (response === 'Dummy Streamer')){
-                this.setDummy();
-              }
+                      if (response.socialMediaHandles['YOUTUBE'] !== null) {
+                        this.setState({
+                          streamerYoutube:
+                            response.socialMediaHandles['YOUTUBE']
+                        });
+                      } else {
+                        this.setState({ streamerYoutube: '' });
+                      }
+                      if (response.socialMediaHandles['FACEBOOK'] !== null) {
+                        this.setState({
+                          streamerFacebook:
+                            response.socialMediaHandles['FACEBOOK']
+                        });
+                      } else {
+                        this.setState({ streamerFacebook: '' });
+                      }
+                      // if (response.socialMediaHandles['TWITTER'] !== null) {
+                      //     this.setState({streamerTwitter: response.socialMediaHandles['TWITTER']});
+                      // }
+                    } else {
+                      this.setState({ streamerInstagram: '' });
+                      this.setState({ streamerYoutube: '' });
+                      this.setState({ streamerFacebook: '' });
+                    }
+                  }
+                });
             }
-          });
+            // else two cases: on startup, response is Dummy Streamer
+            // or Dummy streamer kept playing after queue becomes empty
+            // either way, set the dummy profile variables
+            else if (
+              this.state.streamerName === 'Dummy Streamer' ||
+              response === 'Dummy Streamer'
+            ) {
+              this.setDummy();
+            }
+          }
+        });
 
       fetch(`https://limelight-ucla.herokuapp.com/stream/getRemainingTime`, {
         method: 'GET',
@@ -244,17 +266,14 @@ class Stream extends React.Component {
           'Access-Control-Allow-Origin': '*'
         }
       })
-          .then(response => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              const DummyStreamerTime = 0;
-              this.setState({ streamerName: DummyStreamerTime });
-            }
-          })
-          .then(response => {
-            this.setState({ timeRemain: response });
-          });
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+        })
+        .then(response => {
+          this.setState({ timeRemain: response === -1 ? '-' : response });
+        });
     }, 1000);
 
     //get comments
@@ -262,8 +281,8 @@ class Stream extends React.Component {
       fetch(`https://limelight-ucla.herokuapp.com/stream/getComments`, {
         method: 'GET'
       })
-          .then(res => res.json())
-          .then(comments => this.setState({ messages: comments }));
+        .then(res => res.json())
+        .then(comments => this.setState({ messages: comments }));
     }, 2000);
   }
 
@@ -287,11 +306,17 @@ class Stream extends React.Component {
     } = this.state;
     const joinQueue = (
       <>
-        <button className="queue" onClick={this.joinQueue}>Join Queue</button>
+        <button className="queue" onClick={this.joinQueue}>
+          Join Queue
+        </button>
         <input type="file" id="getFile" onChange={this.onUploadVideo} />
       </>
     );
-    const leaveQueue = <button className="queue leave" onClick={this.leaveQueue}>Leave Queue</button>;
+    const leaveQueue = (
+      <button className="queue leave" onClick={this.leaveQueue}>
+        Leave Queue
+      </button>
+    );
     return (
       <div className="stream-page">
         <div className="container">
@@ -319,13 +344,9 @@ class Stream extends React.Component {
             </video>
           </section>
           <section className="stream-info">
-            <div className="streamer-username">
-              <p>Username: {streamerName}</p>
-              <p>Time remaining: {timeRemain} seconds</p>
-            </div>
-            <div className="checkProfileButton">
+            <div className="stream-info-container">
               <Popup
-                trigger={<button className="button"> Check Profile </button>}
+                trigger={<p className="username">{streamerName} ⓘ</p>}
                 modal
               >
                 {close => (
@@ -333,9 +354,8 @@ class Stream extends React.Component {
                     <a className="close" onClick={close}>
                       &times;
                     </a>
-                    <div className="header"> Username: {streamerName}</div>
+                    <div className="header">{streamerName}</div>
                     <div className="content">
-                      {' '}
                       First Name: {streamerFirstName}
                       <br />
                       Last Name: {streamerLastName}
@@ -351,36 +371,27 @@ class Stream extends React.Component {
                       Other: {streamerOther}
                       <br />
                     </div>
-                    <div className="closeProfile">
-                      <button
-                        className="button"
-                        onClick={() => {
-                          close();
-                        }}
-                      >
-                        Close Profile
-                      </button>
-                    </div>
                   </div>
                 )}
               </Popup>
+
+              <p className="time-remaining">
+                Time Remaining: {timeRemain} seconds
+              </p>
             </div>
-            <div className="voteUpButton">
-              <button
-                disabled={this.state.voted}
-                onClick={this.onVoteUp.bind(this)}
-              >
-                +5 Seconds
-              </button>
-            </div>
-            <div className="voteDownButton">
-              <button
-                disabled={this.state.voted}
-                onClick={this.onVoteDown.bind(this)}
-              >
-                -2 Seconds
-              </button>
-            </div>
+            <button
+              disabled={this.state.voted}
+              onClick={this.onVoteDown.bind(this)}
+            >
+              -2 seconds
+            </button>
+
+            <button
+              disabled={this.state.voted}
+              onClick={this.onVoteUp.bind(this)}
+            >
+              +5 seconds
+            </button>
           </section>
           <section className="chat">
             <div ref={this.messagesRef} className="messages">

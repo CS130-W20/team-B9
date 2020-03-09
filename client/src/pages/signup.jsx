@@ -9,7 +9,7 @@ class Signup extends React.Component {
     this.state = {
       userName: '',
       password: '',
-      errors: '',
+      errors: ''
     };
   }
 
@@ -23,45 +23,44 @@ class Signup extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const form  = new FormData();
+    const form = new FormData();
 
-    for(const name in this.state) {
+    for (const name in this.state) {
       if (name !== 'error') {
         form.append(name, this.state[name]);
       }
     }
-  
+
     fetch('https://limelight-ucla.herokuapp.com/app/signup', {
       method: 'POST',
       headers: {
-        'Access-Control-Allow-Origin':'*'
+        'Access-Control-Allow-Origin': '*'
       },
       body: form
     })
-    .then((response) => {
-      return response.json();
-    })
-    .then((response) => {
-      if (response === 0) {
-        if (this.state.userName === '') {
-          this.setState({ errors: "Please enter username" });
-        } else if (this.state.password === '') {
-          this.setState({ errors: "Please enter password" });
+      .then(response => {
+        return response.json();
+      })
+      .then(response => {
+        if (response === 0) {
+          if (this.state.userName === '') {
+            this.setState({ errors: 'Please enter a username' });
+          } else if (this.state.password === '') {
+            this.setState({ errors: 'Please enter a password' });
+          } else {
+            this.setState({ errors: 'Username taken' });
+          }
         } else {
-          this.setState({ errors: "Username taken" });
+          localStorage.setItem('userSessionKey', response);
+          localStorage.setItem('userName', this.state.userName);
+          this.props.history.push('/stream');
         }
-      }
-      else{
-        localStorage.setItem('userSessionKey', response);
-        localStorage.setItem('userName', this.state.userName);
-        this.props.history.push('/stream');
-      }
-    });
-};
+      });
+  };
 
   render() {
     const { userName, password, errors } = this.state;
-    
+
     return (
       <div className="signup-page">
         <section className="hero">
@@ -69,7 +68,6 @@ class Signup extends React.Component {
         </section>
         <section className="body">
           <form onSubmit={this.handleSubmit} id="form">
-            <p>{errors}</p>
             <div className="form-input">
               <label htmlFor="userName">Username</label>
               <input
@@ -90,9 +88,12 @@ class Signup extends React.Component {
               />
             </div>
           </form>
+
           <button type="submit" form="form">
             SIGN UP
           </button>
+
+          <p>{errors}</p>
         </section>
       </div>
     );

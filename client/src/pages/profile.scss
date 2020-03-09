@@ -1,130 +1,136 @@
 .user-profile-page {
-    .hero {
-        background-color: black;
-        background-image: url('../assets/spotlight-effect.png');
-        background-position: 50%;
-        background-size: 500px;
-        background-repeat: no-repeat;
-        color: white;
-        font-size: 30px;
-        font-weight: bold;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding:100px 0 130px 0;
-        clip-path: polygon(
-            0 0,
-            100% 0,
-            100% 85%,
-            0 100%,
-          );
-        overflow: hidden;
-        
-        a:link, a:visited {
-            background-color:rgba(87, 86, 86, 0.616);
-            transition: all 0.3s ease-out;
-            color: white;
-            border: 0.5px solid white;
-            border-radius: 7px;
-            padding: 10px 10px;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 15px;
-            display: inline-block;
-            cursor:pointer;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 150px;
-          }
-        
-        a:hover, a:active {
-            background-color:rgba(255, 255, 255, 0.616);
-          }
-          
-        h1 {
-            position: absolute;
-            font-size: 22px;
-            color: black;
-            font-weight: bolder;
-            top: 20px;
-            left: 50px;
-        }
-        img {
-            position: absolute;
-            top: 15px;
-            left: 10px;
-            height: 35px;
-        }
+  .hero {
+    background-color: black;
+    background-image: url('../assets/spotlight-effect.png');
+    background-position: 50%;
+    background-size: 500px;
+    background-repeat: no-repeat;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 0 130px 0;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    overflow: hidden;
 
-        .return-button-container {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            display: inline-block;
-        }
-        
-        form {
-            border: 2px solid gray;
-            color: gray;
-            background-color: white;
-            padding: 8px 20px;
-            font-size: 20px;
-            font-weight: bold;
-        }
+    .username {
+      p {
+        font-size: 2rem;
+      }
     }
 
-    .body {
-        align-items: center;
-        margin-top: 40px;
-        margin-left:auto;
-        margin-right:auto;
-        width:370px;
-
-        label{
-            display: inline-block;
-            width: 120px;
-            height: 30px;
-            font-size: 18px;
-            font-weight: bolder;
-            text-align: right;
-            margin-top: 10px;
-            text-align: right;
-        }
-        input {
-            display: inline-block;
-            margin-top: 10px;
-            margin-left: 10px;
-            text-align: left;
-            border: 0;
-            outline: 0;
-            font-size: 15px;
-            background: transparent;
-            border-bottom: 1px solid black;
-            width: 200px;
-        }
-        button {
-          border: 0.5px solid black;
-          background-color: white;
-          text-align: center;
-          text-decoration: none;
-          font-size: 16px;
-          border-radius: 7px;
-          padding: 10px 10px;
-          text-align: center;
-          text-decoration: none;
-          font-weight: bold;
-          display: inline-block;
-          position: absolute;
-          right: 30px;
-          bottom: 25px;
-          width: 80px;
-        }
+    a:link,
+    a:visited {
+      background-color: rgba(87, 86, 86, 0.616);
+      transition: all 0.3s ease-out;
+      color: white;
+      border: 0.5px solid white;
+      border-radius: 7px;
+      padding: 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 15px;
+      display: inline-block;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 150px;
     }
 
+    a:hover,
+    a:active {
+      background-color: rgba(255, 255, 255, 0.616);
+    }
 
+    h1 {
+      position: absolute;
+      font-size: 2rem;
+      color: white;
+      font-weight: bolder;
+      top: 26px;
+      left: 67px;
+    }
+    img {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      height: 50px;
+    }
+
+    .return-button-container {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      display: inline-block;
+    }
+
+    form {
+      border: 2px solid gray;
+      color: gray;
+      background-color: white;
+      padding: 8px 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
   }
-  
+
+  .body {
+    align-items: center;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 370px;
+
+    label {
+      display: inline-block;
+      width: 120px;
+      height: 30px;
+      font-size: 18px;
+      font-weight: bolder;
+      text-align: right;
+      margin-top: 10px;
+      text-align: right;
+    }
+    input {
+      display: inline-block;
+      margin-top: 10px;
+      margin-left: 10px;
+      text-align: left;
+      border: 0;
+      outline: 0;
+      font-size: 15px;
+      background: transparent;
+      border-bottom: 1px solid black;
+      width: 200px;
+    }
+    button {
+      border: 0.5px solid black;
+      background-color: white;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      border-radius: 7px;
+      padding: 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      position: absolute;
+      right: 30px;
+      bottom: 25px;
+      width: 80px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    button:active{
+      background-color: #009994;
+    }
+  }
+}
