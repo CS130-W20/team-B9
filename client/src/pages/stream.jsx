@@ -281,7 +281,7 @@ class Stream extends React.Component {
       })
         .then(res => res.json())
         .then(comments => this.setState({ messages: comments }));
-    }, 2000);
+    }, 500);
   }
 
   render() {
