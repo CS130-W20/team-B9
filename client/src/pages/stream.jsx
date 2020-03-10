@@ -69,14 +69,6 @@ class Stream extends React.Component {
   //todo: change username to be the person who is logged in
   onSend = () => {
     this.setState(prevState => ({
-      messages: [
-        ...prevState.messages,
-        {
-          username: this.state.userName,
-          comment: prevState.chatMessage,
-          key: Date.now()
-        }
-      ],
       chatMessage: ''
     }));
     const form = new FormData();
@@ -346,7 +338,10 @@ class Stream extends React.Component {
           </header>
           <section className="stream">
             <video id="myVideo" autoPlay loop name="media">
-              <source src={this.state.videoURLWithRandomParam} type="video/mp4" />
+              <source
+                src={this.state.videoURLWithRandomParam}
+                type="video/mp4"
+              />
             </video>
           </section>
           <section className="stream-info">

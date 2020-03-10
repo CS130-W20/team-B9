@@ -28,6 +28,8 @@ public class StreamController {
 
   private UrlResource urlResource;
 
+  private List<LivestreamComment> comments = new ArrayList<>();
+
   public StreamController() {
     queue = StreamQueue.getInstance();
   }
@@ -72,7 +74,6 @@ public class StreamController {
     if (queueStreamer == null) {
       currentStreamer = null;
       if (currentStream != null) {
-        currentStream.clearComments();
         currentStream = null;
       }
     } else if (!queueStreamer.equals(currentStreamer)) {
@@ -201,7 +202,7 @@ public class StreamController {
    */
   @PostMapping("/addComment")
   public @ResponseBody boolean addComment(@RequestParam String userName, @RequestParam String comment) {
-    currentStream.addComment(userName, comment);
+    comments.add(new LivestreamComment(userName, comment));
     return true;
   }
 
@@ -213,7 +214,9 @@ public class StreamController {
   @CrossOrigin
   @GetMapping("/getComments")
   public @ResponseBody List<LivestreamComment> getComments() {
-    return currentStream == null ? new ArrayList<>() : currentStream.getComments();
+    // return currentStream == null ? new ArrayList<>() : currentStream.getComments();
+
+    return comments;
   }
 
   /**
