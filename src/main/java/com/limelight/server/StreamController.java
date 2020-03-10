@@ -202,6 +202,9 @@ public class StreamController {
    */
   @PostMapping("/addComment")
   public @ResponseBody boolean addComment(@RequestParam String userName, @RequestParam String comment) {
+    if (comments.size() >= 100) {
+      comments.remove(0);
+    }
     comments.add(new LivestreamComment(userName, comment));
     return true;
   }
