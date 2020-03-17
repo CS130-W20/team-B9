@@ -26,5 +26,5 @@ After cloning the limelight repository, navigate to the client subdirectory and 
 ## Relevant Links 
 - Documentation link: All documentation can be found [here](https://github.com/CS130-W20/team-B9/tree/master/docs), mostly in JavaDoc format.
 - Working URL: Join the Limelight [here](http://limelight-app.now.sh/)!
-
+- Video demo: Watch a video demo [here](https://youtu.be/wANkrY_gR0A)!
 
